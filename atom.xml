@@ -501,6 +501,77 @@ git branch -d branch1
   </entry>
   
   <entry>
+    <title>终端复用软件之tmux简介</title>
+    <link href="http://www.ezlippi.com//blog/2016/01/tmux-guide.html"/>
+    <id>http://www.ezlippi.com//blog/2016/01/tmux-guide.html</id>
+    <published>2016-01-18T17:05:13.000Z</published>
+    <updated>2016-03-01T06:00:44.000Z</updated>
+    
+    <content type="html">&lt;p&gt;  Tmux是一个优秀的终端复用软件，支持多标签，也支持窗口内部面板的分割，更重要的是，Tmux提供了窗体随时保存和恢复的功能。想象一下假如你在公司的服务器上开了许多窗口调试程序，回到家时通过SSH连接公司电脑又要打开一堆繁琐的窗口，而且还忘记了当时调试到哪一步了，那Tmux可以帮你解决这个难题，当SSH连接断开重新连接后能够恢复到原来的工作环境。&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;h2 id=&quot;安装&quot;&gt;&lt;a href=&quot;#安装&quot; class=&quot;headerlink&quot; title=&quot;安装&quot;&gt;&lt;/a&gt;安装&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;sudo apt-get install tmux&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;安装完成后输入tmux进入软件，界面类似一个下方带有状态栏的终端。&lt;/p&gt;
+&lt;h2 id=&quot;基本概念&quot;&gt;&lt;a href=&quot;#基本概念&quot; class=&quot;headerlink&quot; title=&quot;基本概念&quot;&gt;&lt;/a&gt;基本概念&lt;/h2&gt;&lt;p&gt;  Tmux基于典型的c/s模型，主要分为会话、窗口和面板三个元素：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Session：输入tmux后就创建了一个会话，一个会话是一组窗体的集合。&lt;/li&gt;
+&lt;li&gt;Window：会话中一个可见的窗口。&lt;/li&gt;
+&lt;li&gt;Pane:一个窗口可以分成多个面板。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&quot;/images/images/tmux.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;图中左下角的3显示为当前会话，随后1 vim,2 bash,3 ssh 分别是3个窗口，蓝色bash表示当前窗口，图中用蓝色数字标记的1,2,3分别是bash窗口的三个面板。你还可以在tmux配置文件中给状态栏添加时间、天气等信息。&lt;/p&gt;
+&lt;h2 id=&quot;Tmux基本操作&quot;&gt;&lt;a href=&quot;#Tmux基本操作&quot; class=&quot;headerlink&quot; title=&quot;Tmux基本操作&quot;&gt;&lt;/a&gt;Tmux基本操作&lt;/h2&gt;&lt;p&gt;Tmux的所有操作必须使用一个前缀进入命令模式，默认前缀为Ctrl+b，很多人会改为Ctrl+a,你可以修改tmux.conf配置文件来修改默认前缀：&lt;/p&gt;
+&lt;figure class=&quot;highlight vim&quot;&gt;&lt;figcaption&gt;&lt;span&gt;Script &lt;/span&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;# 前缀设置为&amp;lt;Ctrl-&lt;span class=&quot;keyword&quot;&gt;a&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;set&lt;/span&gt; -&lt;span class=&quot;keyword&quot;&gt;g&lt;/span&gt; prefix C-&lt;span class=&quot;keyword&quot;&gt;a&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;# 解除&amp;lt;Ctrl-&lt;span class=&quot;keyword&quot;&gt;b&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;ubind C-&lt;span class=&quot;keyword&quot;&gt;b&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;修改之后重启Tmux生效，或者先按Ctrl+b，然后输入：，进入命令行模式， 在命令行模式下输入：&lt;/p&gt;
+&lt;figure class=&quot;highlight vim&quot;&gt;&lt;figcaption&gt;&lt;span&gt;Script &lt;/span&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;source&lt;/span&gt;-&lt;span class=&quot;keyword&quot;&gt;file&lt;/span&gt; ~/.tmux.&lt;span class=&quot;keyword&quot;&gt;conf&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;你也可以在配置文件中加入下面这句话，以后改了配置文件只需要按前缀+r了。&lt;/p&gt;
+&lt;figure class=&quot;highlight vim&quot;&gt;&lt;figcaption&gt;&lt;span&gt;Script &lt;/span&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;# 将&lt;span class=&quot;keyword&quot;&gt;r&lt;/span&gt; 设置为加载配置文件，并显示&lt;span class=&quot;string&quot;&gt;&quot;reloaded!&quot;&lt;/span&gt;信息&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;bind &lt;span class=&quot;keyword&quot;&gt;r&lt;/span&gt; &lt;span class=&quot;keyword&quot;&gt;source&lt;/span&gt;-&lt;span class=&quot;keyword&quot;&gt;file&lt;/span&gt; ~/.tmux.&lt;span class=&quot;keyword&quot;&gt;conf&lt;/span&gt; \; &lt;span class=&quot;keyword&quot;&gt;display&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&quot;Reloaded!&quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;加入如下几条语句， 现在切换面板就和vim一样了：&lt;/p&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;figcaption&gt;&lt;span&gt;Script &lt;/span&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;# map Vi movement keys as pane movement keys&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;bind h select-pane -L&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;bind j select-pane -D&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;bind k select-pane -U&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;bind l select-pane -R&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;``` &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;## 复制/粘贴&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;1. 按前缀+[ 进入复制模式&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2. 按 space 开始复制，移动光标选择复制区域&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3. 按 Enter 复制并退出copy-mode。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4. 将光标移动到指定位置，按前缀+ ] 粘贴&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;如果把tmux比作vim的话，那么我们大部分时间都是处于编辑模式，只需要在配置文件(~/.tmux.conf)中加入如下行即可以像 vim一样使用hjkl移动:&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;``` Vim Script &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;#copy-mode 将快捷键设置为vi 模式&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;setw -g mode-keys vi&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;会话的创建和保存&quot;&gt;&lt;a href=&quot;#会话的创建和保存&quot; class=&quot;headerlink&quot; title=&quot;会话的创建和保存&quot;&gt;&lt;/a&gt;会话的创建和保存&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;终端运行tmux + 会话名，创建或打开会话&lt;/li&gt;
+&lt;li&gt;前缀 + d 退出并保存会话&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;窗口操作&quot;&gt;&lt;a href=&quot;#窗口操作&quot; class=&quot;headerlink&quot; title=&quot;窗口操作&quot;&gt;&lt;/a&gt;窗口操作&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;前缀 + c 创建一个新的window&lt;/li&gt;
+&lt;li&gt;前缀 + b 重命名当前window&lt;/li&gt;
+&lt;li&gt;前缀 + &amp;amp; 关闭当前window&lt;/li&gt;
+&lt;li&gt;前缀 + n 移动到下一个窗口&lt;/li&gt;
+&lt;li&gt;前缀 + p 移动到前一个窗口&lt;/li&gt;
+&lt;li&gt;前缀 + l 切换到上一个窗口&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;面板操作&quot;&gt;&lt;a href=&quot;#面板操作&quot; class=&quot;headerlink&quot; title=&quot;面板操作&quot;&gt;&lt;/a&gt;面板操作&lt;/h2&gt;&lt;p&gt;在配置文件中添加下面两行就可以使用&lt;code&gt;前缀+ |-&lt;/code&gt;来水平和垂直分割窗口：&lt;/p&gt;
+&lt;figure class=&quot;highlight vim&quot;&gt;&lt;figcaption&gt;&lt;span&gt;Script &lt;/span&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;# use PREFIX | &lt;span class=&quot;keyword&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;built_in&quot;&gt;split&lt;/span&gt; window horizontally &lt;span class=&quot;built_in&quot;&gt;and&lt;/span&gt; PREFIX - &lt;span class=&quot;keyword&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;built_in&quot;&gt;split&lt;/span&gt; vertically&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;bind | &lt;span class=&quot;built_in&quot;&gt;split&lt;/span&gt;-window -&lt;span class=&quot;keyword&quot;&gt;h&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;bind - &lt;span class=&quot;built_in&quot;&gt;split&lt;/span&gt;-window -&lt;span class=&quot;keyword&quot;&gt;v&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;添加如下命令到配置文件后后可以使用HJKL来调整窗口大小:&lt;/p&gt;
+&lt;figure class=&quot;highlight vim&quot;&gt;&lt;figcaption&gt;&lt;span&gt;Script &lt;/span&gt;&lt;/figcaption&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;# &lt;span class=&quot;keyword&quot;&gt;resize&lt;/span&gt; panes using PREFIX H, J, K, L&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;bind H &lt;span class=&quot;keyword&quot;&gt;resize&lt;/span&gt;-pane -L &lt;span class=&quot;number&quot;&gt;5&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;bind J &lt;span class=&quot;keyword&quot;&gt;resize&lt;/span&gt;-pane -D &lt;span class=&quot;number&quot;&gt;5&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;bind K &lt;span class=&quot;keyword&quot;&gt;resize&lt;/span&gt;-pane -U &lt;span class=&quot;number&quot;&gt;5&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;bind L &lt;span class=&quot;keyword&quot;&gt;resize&lt;/span&gt;-pane -R &lt;span class=&quot;number&quot;&gt;5&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;其他操作：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;ctrl-b&gt; + 方向键，切换窗口&lt;/ctrl-b&gt;&lt;/li&gt;
+&lt;li&gt;&lt;ctrl-b&gt; + q 显示所有面板&lt;/ctrl-b&gt;&lt;/li&gt;
+&lt;li&gt;&lt;ctrl-b&gt; + !/x 关闭当前面板&lt;/ctrl-b&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;查看所有的按键，使用&lt;code&gt;&amp;lt;Ctrl-b&amp;gt; + ?&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&quot;Tmux个性化&quot;&gt;&lt;a href=&quot;#Tmux个性化&quot; class=&quot;headerlink&quot; title=&quot;Tmux个性化&quot;&gt;&lt;/a&gt;Tmux个性化&lt;/h2&gt;&lt;p&gt;你可以使用&lt;a href=&quot;https://github.com/erikw/tmux-powerline&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;tmux-powerline&lt;/a&gt;来美化你的状态栏。&lt;/p&gt;
+&lt;p&gt;美化之后的效果是这样的：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/images/tmux2.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;最后附上我的tmux配置文件：&lt;a href=&quot;https://github.com/LippiOuYang/Profiles/blob/master/tmux.conf&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;.tmux.conf&lt;/a&gt;&lt;/p&gt;
+</content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;  Tmux是一个优秀的终端复用软件，支持多标签，也支持窗口内部面板的分割，更重要的是，Tmux提供了窗体随时保存和恢复的功能。想象一下假如你在公司的服务器上开了许多窗口调试程序，回到家时通过SSH连接公司电脑又要打开一堆繁琐的窗口，而且还忘记了当时调试到哪一步了，那Tmux可以帮你解决这个难题，当SSH连接断开重新连接后能够恢复到原来的工作环境。&lt;/p&gt;
+    
+    </summary>
+    
+      <category term="Unix/Linux" scheme="http://www.ezlippi.com/categories/Unix-Linux/"/>
+    
+    
+      <category term="linux" scheme="http://www.ezlippi.com/tags/linux/"/>
+    
+      <category term="shell" scheme="http://www.ezlippi.com/tags/shell/"/>
+    
+  </entry>
+  
+  <entry>
     <title>提高效率的Android Studio插件</title>
     <link href="http://www.ezlippi.com//blog/2015/09/android-studio-plugins.html"/>
     <id>http://www.ezlippi.com//blog/2015/09/android-studio-plugins.html</id>
@@ -2052,105 +2123,6 @@ List&amp;lt;String&amp;gt; list = new ArrayList&amp;lt;String&amp;gt;();
       <category term="web" scheme="http://www.ezlippi.com/tags/web/"/>
     
       <category term="网络传输" scheme="http://www.ezlippi.com/tags/%E7%BD%91%E7%BB%9C%E4%BC%A0%E8%BE%93/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>优化java代码建议(1)</title>
-    <link href="http://www.ezlippi.com//blog/2015/04/java-code-opt-one.html"/>
-    <id>http://www.ezlippi.com//blog/2015/04/java-code-opt-one.html</id>
-    <published>2015-04-12T13:05:13.000Z</published>
-    <updated>2016-02-29T12:53:26.000Z</updated>
-    
-    <content type="html">&lt;p&gt;假设你要统计一个地区的人口平均年龄，你可能写出下面这段代码：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;public static void main(String[] args){
-   //人口数量50万
-   int peopleNum = 50 * 10000;
-   List&amp;lt;Integer&amp;gt; heights = new ArrayList&amp;lt;&amp;gt;(peopleNum);
-
-   for(int i =0; i &amp;lt; peopleNum; i++){
-       heights.add(new Random().nextInt(300));
-   }
-   //计算时间
-   long start = System.currentTimeMillis();
-   System.out.println(&amp;quot;平均高度是： &amp;quot; + average(heights));
-   System.out.println(&amp;quot;运行时间： &amp;quot; + (System.currentTimeMillis() - start) + &amp;quot;ms&amp;quot;);
-   }
-
-   //计算平均值
-   public static int average(List&amp;lt;Integer&amp;gt; list){
-   int sum = 0;
-   //遍历求和
-   for(int i : list){
-       sum += i;
-   }
-   return sum/list.size();
-   }
-&lt;/code&gt;&lt;/pre&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-&lt;p&gt;这个程序把50万人的身高存入一个ArrayList中，然后通过foreach遍历求和，再计算平均值，输出结果是：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;平均高度是： 154
-运行时间： 47ms
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;仅仅是一个算术平均值就花费了47ms，如果是加权平均值等算法，那花的时间肯定更长了，这段代码也没什么好优化的，唯一剩下的就是元素的遍历，List的遍历可以优化吗？&lt;/p&gt;
-&lt;p&gt;我们之道List的遍历还有另外一种方法，通过下标来索引，代码如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;public static int average1(List&amp;lt;Integer&amp;gt; list){
-    int sum = 0;
-    //遍历求和
-    for(int i = 0, size = list.size(); i &amp;lt; size; i++){
-        sum += list.get(i);
-    }
-    return sum/list.size();
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;运行结果是：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;平均身高是： 154
-运行时间： 16ms
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;可以看到运行时间大幅下降，效率提高了65%，为什么性能得到这么大幅度的提升？&lt;/p&gt;
-&lt;p&gt;这是因为Arraylist实现了RandomAccess接口（随机存取接口），这就标志这ArrayList是一个可以随机存取的列表，实现RandomAccess接口表明这个类可以随机存取，标志着这个List的元素之间&lt;strong&gt;没有关联&lt;/strong&gt;，两个相邻的元素之间没有相互的依赖关系和索引关系，可以随机访问和存储。&lt;/p&gt;
-&lt;p&gt;Java中的foreach语法是iterator的变形用法，也就是说foreach和下面的代码等价：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;for(Iterator&amp;lt;Integer&amp;gt; i = list.iterator(); i.hasNext();){
-    sum += i.next();
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;我们再来想想什么是迭代器，迭代器是23中设计模式中的一种，提供一种方法能够遍历容器的各个元素，同时又无需暴露该对象的实现细节，也就是说需要先创建一个迭代器容器，然后屏蔽内部遍历细节，对外提供hasNext、next方法，问题是ArrayList实现了RandomAccess接口，表明元素之间本来没有关系，可视为了使用迭代器就需要强制建立一种相互“知晓”的一种关系，比如上一个元素可以判断是否有下一个元素，以及下一个元素是什么，这就是通过foreach遍历耗时的原因。&lt;/p&gt;
-&lt;p&gt;但是有些List实现类不是随机存取的，比如LinkedList类，也是一个列表，但它实现了双向链表，每个数据节点node都有三个数据项：前一个节点的引用、本节点元素、下一个节点的引用，也就是说LinkedList的两个元素之间是有关联的，我知道你的存在，你知道我的存在，这时候使用foreach来遍历效率就会更高，我们把代码中的ArrayList修改成LinkedList之后再运行下，结果如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;平均身高是： 154
-运行时间： 16ms
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;确实如此，也是16ms，你可能也想用测试一下下标访问方法遍历LinkedList的元素，其实不用测试，效率非常低下。&lt;/p&gt;
-&lt;p&gt;明白了随机存取和有序存取列表的区别，在遍历列表时就应该采用不同的遍历方式。    &lt;/p&gt;
-</content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;假设你要统计一个地区的人口平均年龄，你可能写出下面这段代码：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;public static void main(String[] args){
-   //人口数量50万
-   int peopleNum = 50 * 10000;
-   List&amp;lt;Integer&amp;gt; heights = new ArrayList&amp;lt;&amp;gt;(peopleNum);
-
-   for(int i =0; i &amp;lt; peopleNum; i++){
-       heights.add(new Random().nextInt(300));
-   }
-   //计算时间
-   long start = System.currentTimeMillis();
-   System.out.println(&amp;quot;平均高度是： &amp;quot; + average(heights));
-   System.out.println(&amp;quot;运行时间： &amp;quot; + (System.currentTimeMillis() - start) + &amp;quot;ms&amp;quot;);
-   }
-
-   //计算平均值
-   public static int average(List&amp;lt;Integer&amp;gt; list){
-   int sum = 0;
-   //遍历求和
-   for(int i : list){
-       sum += i;
-   }
-   return sum/list.size();
-   }
-&lt;/code&gt;&lt;/pre&gt;
-    
-    </summary>
-    
-      <category term="java" scheme="http://www.ezlippi.com/categories/java/"/>
-    
-    
-      <category term="java" scheme="http://www.ezlippi.com/tags/java/"/>
     
   </entry>
   

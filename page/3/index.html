@@ -250,6 +250,147 @@
 
     
     
+      
+      
+
+      
+    
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/blog/2015/04/java-code-opt-one.html" itemprop="url">
+                  优化java代码建议(1)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-04-12T21:05:13+08:00" content="2015-04-12">
+              2015-04-12
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/2015/04/java-code-opt-one.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2015/04/java-code-opt-one.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>假设你要统计一个地区的人口平均年龄，你可能写出下面这段代码：</p>
+<pre><code>public static void main(String[] args){
+   //人口数量50万
+   int peopleNum = 50 * 10000;
+   List&lt;Integer&gt; heights = new ArrayList&lt;&gt;(peopleNum);
+
+   for(int i =0; i &lt; peopleNum; i++){
+       heights.add(new Random().nextInt(300));
+   }
+   //计算时间
+   long start = System.currentTimeMillis();
+   System.out.println(&quot;平均高度是： &quot; + average(heights));
+   System.out.println(&quot;运行时间： &quot; + (System.currentTimeMillis() - start) + &quot;ms&quot;);
+   }
+
+   //计算平均值
+   public static int average(List&lt;Integer&gt; list){
+   int sum = 0;
+   //遍历求和
+   for(int i : list){
+       sum += i;
+   }
+   return sum/list.size();
+   }
+</code></pre>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/blog/2015/04/java-code-opt-one.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -816,118 +957,6 @@
           很久很久以前，在还没有缓存的时候……用户经常是去请求一个对象，而这个对象是从数据库去取，然后，这个对象变得越来越大，这个用户每次的请求时间也越来越长了，这也把数据库弄得很痛苦，他无时不刻不在工作。所以，这个事情就把用户和数据库弄得很生气，接着就有可能发生下面两件事情
           <div class="post-more-link text-center">
             <a class="btn" href="/blog/2015/02/cache.html">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/blog/2015/01/tmux-guide.html" itemprop="url">
-                  终端复用软件之tmux简介
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-01-19T01:05:13+08:00" content="2015-01-19">
-              2015-01-19
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/Unix-Linux/" itemprop="url" rel="index">
-                    <span itemprop="name">Unix/Linux</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/blog/2015/01/tmux-guide.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2015/01/tmux-guide.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>  Tmux是一个优秀的终端复用软件，支持多标签，也支持窗口内部面板的分割，更重要的是，Tmux提供了窗体随时保存和恢复的功能。想象一下假如你在公司的服务器上开了许多窗口调试程序，回到家时通过SSH连接公司电脑又要打开一堆繁琐的窗口，而且还忘记了当时调试到哪一步了，那Tmux可以帮你解决这个难题，当SSH连接断开重新连接后能够恢复到原来的工作环境。</p>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/blog/2015/01/tmux-guide.html#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>

@@ -250,6 +250,123 @@
 
     
     
+      
+      
+
+      
+    
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/blog/2015/07/gradle-tasks-guide.html" itemprop="url">
+                  彻底理解Gradle的任务
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-07-27T00:00:00+08:00" content="2015-07-27">
+              2015-07-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/gradle/" itemprop="url" rel="index">
+                    <span itemprop="name">gradle</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/2015/07/gradle-tasks-guide.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2015/07/gradle-tasks-guide.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在Gradle的build文件中，任务是构建活动最基本的单元，它是许多构建指令的集合，下面我将仔细介绍Gradle任务的细节。<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/blog/2015/07/gradle-tasks-guide.html#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
 
     
       
@@ -1233,142 +1350,6 @@
           理论上，视频或邮件信息是能够以大块非中断型流从网络源地址传送到目的地址，但这也意味着同一时刻同一网络其他设备就无法收发消息。这种大型数据流会造成显著延时。并且，如果传输过程中连接断开，整个数据流都会丢失需要全部重传。因此更好的方法是将数据流分割
           <div class="post-more-link text-center">
             <a class="btn" href="/blog/2015/04/web-transmission-basis.html">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/blog/2015/04/java-code-opt-one.html" itemprop="url">
-                  优化java代码建议(1)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2015-04-12T21:05:13+08:00" content="2015-04-12">
-              2015-04-12
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/blog/2015/04/java-code-opt-one.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2015/04/java-code-opt-one.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>假设你要统计一个地区的人口平均年龄，你可能写出下面这段代码：</p>
-<pre><code>public static void main(String[] args){
-   //人口数量50万
-   int peopleNum = 50 * 10000;
-   List&lt;Integer&gt; heights = new ArrayList&lt;&gt;(peopleNum);
-
-   for(int i =0; i &lt; peopleNum; i++){
-       heights.add(new Random().nextInt(300));
-   }
-   //计算时间
-   long start = System.currentTimeMillis();
-   System.out.println(&quot;平均高度是： &quot; + average(heights));
-   System.out.println(&quot;运行时间： &quot; + (System.currentTimeMillis() - start) + &quot;ms&quot;);
-   }
-
-   //计算平均值
-   public static int average(List&lt;Integer&gt; list){
-   int sum = 0;
-   //遍历求和
-   for(int i : list){
-       sum += i;
-   }
-   return sum/list.size();
-   }
-</code></pre>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/blog/2015/04/java-code-opt-one.html#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>

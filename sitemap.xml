@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.ezlippi.com//blog/2016/01/tmux-guide.html</loc>
+    
+    <lastmod>2016-03-01T06:00:44.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.ezlippi.com//blog/2014/11/java-nio.html</loc>
     
     <lastmod>2016-03-01T05:17:06.000Z</lastmod>
@@ -404,13 +411,6 @@
     <loc>http://www.ezlippi.com//blog/2016/02/baidu-spider-forbidden.html</loc>
     
     <lastmod>2016-02-29T12:30:58.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.ezlippi.com//blog/2015/01/tmux-guide.html</loc>
-    
-    <lastmod>2016-02-29T12:30:37.000Z</lastmod>
     
   </url>
   
