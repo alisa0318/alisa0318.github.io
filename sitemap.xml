@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.ezlippi.com//blog/2014/12/c-open-project.html</loc>
+    
+    <lastmod>2016-03-03T02:22:37.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.ezlippi.com//blog/2016/01/tmux-guide.html</loc>
     
     <lastmod>2016-03-01T06:00:44.000Z</lastmod>
@@ -201,13 +208,6 @@
     <loc>http://www.ezlippi.com//blog/2014/12/skip-list.html</loc>
     
     <lastmod>2016-02-29T12:38:16.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.ezlippi.com//blog/2014/12/c-open-project.html</loc>
-    
-    <lastmod>2016-02-29T12:37:51.000Z</lastmod>
     
   </url>
   
