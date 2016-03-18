@@ -67,7 +67,7 @@
 <meta property="og:site_name" content="Lippi-浮生志">
 <meta property="og:description" content="Epoll可是当前在Linux下开发大规模并发网络程序的热门人选，Epoll 在Linux2.6内核中正式引入，和select相似，其实都I/O多路复用技术而已，并没有什么神秘的。
 其实在Linux下设计并发网络程序，向来不缺少方法，比如典型的Apache模型（Process Per Connection，简称PPC），TPC（Thread Per Connection）模型，以及select模型">
-<meta property="og:updated_time" content="2016-02-29T12:34:11.000Z">
+<meta property="og:updated_time" content="2016-03-18T08:43:00.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="处理并发之一：LINUX Epoll机制介绍">
 <meta name="twitter:description" content="Epoll可是当前在Linux下开发大规模并发网络程序的热门人选，Epoll 在Linux2.6内核中正式引入，和select相似，其实都I/O多路复用技术而已，并没有什么神秘的。
@@ -343,12 +343,9 @@
       
         <p>Epoll可是当前在Linux下开发大规模并发网络程序的热门人选，Epoll 在Linux2.6内核中正式引入，和select相似，其实都I/O多路复用技术而已，并没有什么神秘的。</p>
 <p>其实在Linux下设计并发网络程序，向来不缺少方法，比如典型的Apache模型（Process Per Connection，简称PPC），TPC（Thread Per Connection）模型，以及select模型和poll模型，那为何还要再引入Epoll这个东东呢？那还是有得说说的…<br><a id="more"></a></p>
-<p>##2. 常用模型的缺点</p>
-<p>如果不摆出来其他模型的缺点，怎么能对比出Epoll的优点呢。</p>
-<p>###2.1 PPC/TPC模型</p>
-<p>这两种模型思想类似，就是让每一个到来的连接一边自己做事去，别再来烦我。只是PPC是为它开了一个进程，而TPC开了一个线程。可是别烦我是有代价的，它要时间和空间啊，连接多了之后，那么多的进程/线程切换，这开销就上来了；因此这类模型能接受的最大连接数都不会高，一般在几百个左右。</p>
-<p>###2.2 select模型</p>
-<ol>
+<h2 id="2-常用模型的缺点"><a href="#2-常用模型的缺点" class="headerlink" title="2. 常用模型的缺点"></a>2. 常用模型的缺点</h2><p>如果不摆出来其他模型的缺点，怎么能对比出Epoll的优点呢。</p>
+<h3 id="2-1-PPC-TPC模型"><a href="#2-1-PPC-TPC模型" class="headerlink" title="2.1 PPC/TPC模型"></a>2.1 PPC/TPC模型</h3><p>这两种模型思想类似，就是让每一个到来的连接一边自己做事去，别再来烦我。只是PPC是为它开了一个进程，而TPC开了一个线程。可是别烦我是有代价的，它要时间和空间啊，连接多了之后，那么多的进程/线程切换，这开销就上来了；因此这类模型能接受的最大连接数都不会高，一般在几百个左右。</p>
+<h3 id="2-2-select模型"><a href="#2-2-select模型" class="headerlink" title="2.2 select模型"></a>2.2 select模型</h3><ol>
 <li><p>最大并发数限制，因为一个进程所打开的FD（文件描述符）是有限制的，由FD_SETSIZE设置，默认值是1024/2048，因此Select模型的最大并发数就被相应限制了。自己改改这个FD_SETSIZE？想法虽好，可是先看看下面吧…</p>
 </li>
 <li><p>效率问题，select每次调用都会线性扫描全部的FD集合，这样效率就会呈现线性下降，把FD_SETSIZE改大的后果就是，大家都慢慢来，什么？都超时了？？！！</p>
@@ -356,15 +353,12 @@
 <li><p>内核/用户空间 内存拷贝问题，如何让内核把FD消息通知给用户空间呢？在这个问题上select采取了内存拷贝方法。</p>
 </li>
 </ol>
-<p>###2.3 poll模型</p>
-<p>基本上效率和select是相同的，select缺点的2和3它都没有改掉。</p>
-<p>##3.Epoll的提升</p>
-<p>把其他模型逐个批判了一下，再来看看Epoll的改进之处吧，其实把select的缺点反过来那就是Epoll的优点了。</p>
+<h3 id="2-3-poll模型"><a href="#2-3-poll模型" class="headerlink" title="2.3 poll模型"></a>2.3 poll模型</h3><p>基本上效率和select是相同的，select缺点的2和3它都没有改掉。</p>
+<h2 id="3-Epoll的提升"><a href="#3-Epoll的提升" class="headerlink" title="3.Epoll的提升"></a>3.Epoll的提升</h2><p>把其他模型逐个批判了一下，再来看看Epoll的改进之处吧，其实把select的缺点反过来那就是Epoll的优点了。</p>
 <p>3.1. Epoll没有最大并发连接的限制，上限是最大可以打开文件的数目，这个数字一般远大于2048, 一般来说这个数目和系统内存关系很大，具体数目可以cat /proc/sys/fs/file-max察看。</p>
 <p>3.2. 效率提升，Epoll最大的优点就在于它只管你“活跃”的连接，而跟连接总数无关，因此在实际的网络环境中，Epoll的效率就会远远高于select和poll。</p>
 <p>3.3. 内存拷贝，Epoll在这点上使用了“共享内存”，这个内存拷贝也省略了。</p>
-<p>##4. Epoll为什么高效</p>
-<p>Epoll的高效和其数据结构的设计是密不可分的，这个下面就会提到。</p>
+<h2 id="4-Epoll为什么高效"><a href="#4-Epoll为什么高效" class="headerlink" title="4. Epoll为什么高效"></a>4. Epoll为什么高效</h2><p>Epoll的高效和其数据结构的设计是密不可分的，这个下面就会提到。</p>
 <p>首先回忆一下select模型，当有I/O事件到来时，select通知应用程序有事件到了快去处理，而应用程序必须轮询所有的FD集合，测试每个FD是否有事件发生，并处理事件；代码像下面这样：</p>
 <pre><code>int res = select(maxfd+1, &amp;readfds, NULL, NULL, 120);
 if(res &gt; 0)
@@ -386,8 +380,7 @@ for(int i = 0; i &lt; res;i++)
 {
     handleEvent(events[n]);
 }
-</code></pre><p>##5. Epoll关键数据结构</p>
-<p>前面提到Epoll速度快和其数据结构密不可分，其关键数据结构就是：</p>
+</code></pre><h2 id="5-Epoll关键数据结构"><a href="#5-Epoll关键数据结构" class="headerlink" title="5. Epoll关键数据结构"></a>5. Epoll关键数据结构</h2><p>前面提到Epoll速度快和其数据结构密不可分，其关键数据结构就是：</p>
 <pre><code>struct epoll_event {
 
     __uint32_t events;      // Epoll events
@@ -418,8 +411,7 @@ typedef union epoll_data {
 </ul>
 <p><strong>ET和LT模式</strong><br>LT(level triggered)是缺省的工作方式，并且同时支持block和no-block socket.在这种做法中，内核告诉你一个文件描述符是否就绪了，然后你可以对这个就绪的fd进行IO操作。如果你不作任何操作，内核还是会继续通知你的，所以，这种模式编程出错误可能性要小一点。传统的select/poll都是这种模型的代表。</p>
 <p>ET (edge-triggered)是高速工作方式，只支持no-block socket。在这种模式下，当描述符从未就绪变为就绪时，内核通过epoll告诉你。然后它会假设你知道文件描述符已经就绪，并且不会再为那个文件描述符发送更多的就绪通知，直到你做了某些操作导致那个文件描述符不再为就绪状态了（比如，你在发送，接收或者接收请求，或者发送接收的数据少于一定量时导致了一个EWOULDBLOCK 错误）。但是请注意，如果一直不对这个fd作IO操作（从而导致它再次变成未就绪），内核不会发送更多的通知(only once)，不过在TCP协议中，ET模式的加速效用仍需要更多的benchmark确认。<br>ET和LT的区别在于LT事件不会丢弃，而是只要读buffer里面有数据可以让用户读，则不断的通知你。而ET则只在事件发生之时通知。可以简单理解为LT是水平触发，而ET则为边缘触发。<br>ET模式仅当状态发生变化的时候才获得通知,这里所谓的状态的变化并不包括缓冲区中还有未处理的数据,也就是说,如果要采用ET模式,需要一直read/write直到出错为止,很多人反映为什么采用ET模式只接收了一部分数据就再也得不到通知了,大多因为这样;而LT模式是只要有数据没有处理就会一直通知下去的.</p>
-<p>##6. 使用Epoll</p>
-<p>既然Epoll相比select这么好，那么用起来如何呢？会不会很繁琐啊…先看看下面的三个函数吧，就知道Epoll的易用了。</p>
+<h2 id="6-使用Epoll"><a href="#6-使用Epoll" class="headerlink" title="6. 使用Epoll"></a>6. 使用Epoll</h2><p>既然Epoll相比select这么好，那么用起来如何呢？会不会很繁琐啊…先看看下面的三个函数吧，就知道Epoll的易用了。</p>
 <pre><code>int epoll_create(int size);
 </code></pre><p>生成一个Epoll专用的文件描述符，其实是申请一个内核空间，用来存放你想关注的socket fd上是否发生以及发生了什么事件。size就是你在这个Epoll fd上能关注的最大socket fd数，大小自定，只要内存足够。</p>
 <pre><code>int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
@@ -441,7 +433,7 @@ typedef union epoll_data {
 </ul>
 <hr>
 <hr>
-<p>##测试程序<br>首先对服务端和客户端做下说明：<br>我想实现的是客户端和服务端并发的程序，客户端通过配置并发数，说明有多少个用户去连接服务端。<br>客户端会发送消息：”Client: i send message Hello Server!”，其中i表示哪一个客户端；收到消息：”Recv Server Msg Content:%s\n”。<br>例如：<br>发送：Client: 1 send message “Hello Server!”<br>接收：Recv Derver Msg Content:Hello, client fd: 6<br>服务端收到后给客户端回复消息：”Hello, client fd: i”，其中i表示服务端接收的fd,用户区别是哪一个客户端。接收客户端消息：”Terminal Received Msg Content:%s\n”<br>例如：<br>发送：Hello, client fd: 6<br>接收：Terminal Received Msg Content:Client: 1 send message “Hello Server!”<br>备注：这里在接收到消息后，直接打印出消息，如果需要对消息进行处理（如果消息处理比较占用时间，不能立即返回，可以将该消息放入一个队列中，然后开启一个线程从队列中取消息进行处理，这样的话不会因为消息处理而阻塞epoll）。libenent好像对这种有2中处理方式，一个就是回调，要求回调函数，不占用太多的时间，基本能立即返回，另一种好像也是一个队列实现的，这个还需要研究。<br>服务端代码说明：<br>服务端在绑定监听后，开启了一个线程，用于负责接收客户端连接，加入到epoll中，这样只要accept到客户端的连接，就将其add EPOLLIN到epoll中，然后进入循环调用epoll_wait，监听到读事件，接收数据，并将事件修改为EPOLLOUT；反之监听到写事件，发送数据，并将事件修改为EPOLLIN。<br><strong>服务器代码：</strong></p>
+<h2 id="测试程序"><a href="#测试程序" class="headerlink" title="测试程序"></a>测试程序</h2><p>首先对服务端和客户端做下说明：<br>我想实现的是客户端和服务端并发的程序，客户端通过配置并发数，说明有多少个用户去连接服务端。<br>客户端会发送消息：”Client: i send message Hello Server!”，其中i表示哪一个客户端；收到消息：”Recv Server Msg Content:%s\n”。<br>例如：<br>发送：Client: 1 send message “Hello Server!”<br>接收：Recv Derver Msg Content:Hello, client fd: 6<br>服务端收到后给客户端回复消息：”Hello, client fd: i”，其中i表示服务端接收的fd,用户区别是哪一个客户端。接收客户端消息：”Terminal Received Msg Content:%s\n”<br>例如：<br>发送：Hello, client fd: 6<br>接收：Terminal Received Msg Content:Client: 1 send message “Hello Server!”<br>备注：这里在接收到消息后，直接打印出消息，如果需要对消息进行处理（如果消息处理比较占用时间，不能立即返回，可以将该消息放入一个队列中，然后开启一个线程从队列中取消息进行处理，这样的话不会因为消息处理而阻塞epoll）。libenent好像对这种有2中处理方式，一个就是回调，要求回调函数，不占用太多的时间，基本能立即返回，另一种好像也是一个队列实现的，这个还需要研究。<br>服务端代码说明：<br>服务端在绑定监听后，开启了一个线程，用于负责接收客户端连接，加入到epoll中，这样只要accept到客户端的连接，就将其add EPOLLIN到epoll中，然后进入循环调用epoll_wait，监听到读事件，接收数据，并将事件修改为EPOLLOUT；反之监听到写事件，发送数据，并将事件修改为EPOLLIN。<br><strong>服务器代码：</strong></p>
 <pre><code>//cepollserver.h  
 #ifndef  C_EPOLL_SERVER_H  
 #define  C_EPOLL_SERVER_H  
@@ -1223,7 +1215,7 @@ int main(int argc, char *argv[])
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-常用模型的缺点"><span class="nav-number">1.</span> <span class="nav-text">2. 常用模型的缺点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-PPC-TPC模型"><span class="nav-number">1.1.</span> <span class="nav-text">2.1 PPC/TPC模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-select模型"><span class="nav-number">1.2.</span> <span class="nav-text">2.2 select模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-poll模型"><span class="nav-number">1.3.</span> <span class="nav-text">2.3 poll模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Epoll的提升"><span class="nav-number">2.</span> <span class="nav-text">3.Epoll的提升</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Epoll为什么高效"><span class="nav-number">3.</span> <span class="nav-text">4. Epoll为什么高效</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Epoll关键数据结构"><span class="nav-number">4.</span> <span class="nav-text">5. Epoll关键数据结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-使用Epoll"><span class="nav-number">5.</span> <span class="nav-text">6. 使用Epoll</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试程序"><span class="nav-number">6.</span> <span class="nav-text">测试程序</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

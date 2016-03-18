@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.ezlippi.com//blog/2014/08/linux-epoll.html</loc>
+    
+    <lastmod>2016-03-18T08:43:00.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.ezlippi.com//blog/2014/07/c-advaced-programming.html</loc>
     
     <lastmod>2016-03-18T08:32:35.000Z</lastmod>
@@ -348,13 +355,6 @@
     <loc>http://www.ezlippi.com//blog/2014/08/libevent.html</loc>
     
     <lastmod>2016-02-29T12:34:20.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.ezlippi.com//blog/2014/08/linux-epoll.html</loc>
-    
-    <lastmod>2016-02-29T12:34:11.000Z</lastmod>
     
   </url>
   
