@@ -65,7 +65,7 @@
 <meta property="og:url" content="http://www.ezlippi.com/blog/2015/02/cache.html">
 <meta property="og:site_name" content="Lippi-浮生志">
 <meta property="og:description" content="很久很久以前，在还没有缓存的时候……用户经常是去请求一个对象，而这个对象是从数据库去取，然后，这个对象变得越来越大，这个用户每次的请求时间也越来越长了，这也把数据库弄得很痛苦，他无时不刻不在工作。所以，这个事情就把用户和数据库弄得很生气，接着就有可能发生下面两件事情">
-<meta property="og:updated_time" content="2016-02-29T13:21:22.000Z">
+<meta property="og:updated_time" content="2016-03-18T09:38:56.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="谈谈缓存和基本的缓存算法">
 <meta name="twitter:description" content="很久很久以前，在还没有缓存的时候……用户经常是去请求一个对象，而这个对象是从数据库去取，然后，这个对象变得越来越大，这个用户每次的请求时间也越来越长了，这也把数据库弄得很痛苦，他无时不刻不在工作。所以，这个事情就把用户和数据库弄得很生气，接着就有可能发生下面两件事情">
@@ -342,17 +342,35 @@
 <ol>
 <li>用户很烦，在抱怨，甚至不去用这个应用了（这是大多数情况下都会发生的） </li>
 <li>数据库为打包回家，离开这个应用，然后，就出现了大麻烦（没地方去存储数据了）（发生在极少数情况下） <a id="more"></a>
-####上帝派来了缓存####</li>
+<h3 id="上帝派来了缓存"><a href="#上帝派来了缓存" class="headerlink" title="上帝派来了缓存"></a>上帝派来了缓存</h3></li>
 </ol>
 <p>在几年之后，IBM（60年代）的研究人员引进了一个新概念，它叫“缓存”。</p>
-<p> ###什么是缓存？ </p>
-  <p>通俗来说，缓存是“存贮数据（使用频繁的数据）的临时地方，因为取原始数据的代价太大了，所以我可以取得快一些。”</p><br>  <p>我们都听说过线程池、对象池，缓存可以认为是数据的池，这些数据是从数据库里的真实数据复制出来的，并且为了能别取回，被标上了标签（键 ID）。</p><br>  <a href="http://img2.tuicool.com/QNvequ.jpg" target="_blank" rel="external">!</a><br>  <h4>命中：</h4><br>  <p>当客户发起一个请求（我们说他想要查看一个产品信息），我们的应用接受这个请求，并且如果是在第一次检查缓存的时候，需要去数据库读取产品信息。</p><br>  <p>如果在缓存中，一个条目通过一个标记被找到了，这个条目就会被使用、我们就叫它缓存命中。所以，命中率也就不难理解了。</p><br>  <h4>Cache Miss：</h4><br>  <p>但是这里需要注意两点：</p><br>  <p>１. 如果还有缓存的空间，那么，没有命中的对象会被存储到缓存中来。</p><br>  <p>２. 如果缓存慢了，而又没有命中缓存，那么就会按照某一种策略，把缓存中的旧对象踢出，而把新的对象加入缓存池。而这些策略统称为<em>替代策略</em>（缓存算法），这些策略会决定到底应该提出哪些对象。</p><br>  <h4>存储成本：</h4><br>  <p>当没有命中时，我们会从数据库取出数据，然后放入缓存。而把这个数据放入缓存所需要的时间和空间，就是存储成本。</p><br>  <h4>索引成本：</h4><br>  <p>和存储成本相仿。</p><br>  <h4>失效：</h4><br>  <p>当存在缓存中的数据需要更新时，就意味着缓存中的这个数据失效了。</p><br>  <h4>替代策略：</h4><br>  <p>当缓存没有命中时，并且缓存容量已经满了，就需要在缓存中踢出一个老的条目，加入一条新的条目，而到底应该踢出什么条目，就由替代策略决定。</p><br>  <h4>最优替代策略：</h4><br>  <p>最优的替代策略就是想把缓存中最没用的条目给踢出去，但是未来是不能够被预知的，所以这种策略是不可能实现的。但是有很多策略，都是朝着这个目前去努力。</p><br>  <h1>缓存算法</h1><br>  <p>没有人能说清哪种缓存算法优于其他的缓存算法</p><br>  <h4>Least Frequently Used（LFU）：</h4><br>  <p>大家好，我是 LFU，我会计算为每个缓存对象计算他们被使用的频率。我会把最不常用的缓存对象踢走。</p><br>  <h4>Least Recently User（LRU）：</h4><br>  <p>我是 LRU 缓存算法，我把最近最少使用的缓存对象给踢走。</p><br>  <p>我总是需要去了解在什么时候，用了哪个缓存对象。如果有人想要了解我为什么总能把最近最少使用的对象踢掉，是非常困难的。</p><br>  <p>浏览器就是使用了我（LRU）作为缓存算法。新的对象会被放在缓存的顶部，当缓存达到了容量极限，我会把底部的对象踢走，而技巧就是：我会把最新被访问的缓存对象，放到缓存池的顶部。</p><br>  <p>所以，经常被读取的缓存对象就会一直呆在缓存池中。有两种方法可以实现我，array 或者是 linked list。</p><br>  <p>我的速度很快，我也可以被数据访问模式适配。我有一个大家庭，他们都可以完善我，甚至做的比我更好（我确实有时会嫉妒，但是没关系）。我家庭的一些成员包括 LRU2 和 2Q，他们就是为了完善 LRU 而存在的。</p><br>  <h4>Least Recently Used 2（LRU2）：</h4><br>  <p>我是 Least Recently Used 2，有人叫我最近最少使用 twice，我更喜欢这个叫法。我会把被两次访问过的对象放入缓存池，当缓存池满了之后，我会把有两次最少使用的缓存对象踢走。因为需要跟踪对象2次，访问负载就会随着缓存池的增加而增加。如果把我用在大容量的缓存池中，就会有问题。另外，我还需要跟踪那么不在缓存的对象，因为他们还没有被第二次读取。我比LRU好，而且是 adoptive to access 模式 。</p><br>  <h4>Two Queues（2Q）：</h4><br>  <p>我是 Two Queues；我把被访问的数据放到 LRU 的缓存中，如果这个对象再一次被访问，我就把他转移到第二个、更大的 LRU 缓存。</p><br>  <p>我踢走缓存对象是为了保持第一个缓存池是第二个缓存池的1/3。当缓存的访问负载是固定的时候，把 LRU 换成 LRU2，就比增加缓存的容量更好。这种机制使得我比 LRU2 更好，我也是 LRU 家族中的一员，而且是 adoptive to access 模式 。</p><br>  <h4>Adaptive Replacement Cache（ARC）：</h4><br>  <p>我是 ARC，有人说我是介于 LRU 和 LFU 之间，为了提高效果，我是由2个 LRU 组成，第一个，也就是 L1，包含的条目是最近只被使用过一次的，而第二个 LRU，也就是 L2，包含的是最近被使用过两次的条目。因此， L1 放的是新的对象，而 L2 放的是常用的对象。所以，别人才会认为我是介于 LRU 和 LFU 之间的，不过没关系，我不介意。</p><br>  <p>我被认为是性能最好的缓存算法之一，能够自调，并且是低负载的。我也保存着历史对象，这样，我就可以记住那些被移除的对象，同时，也让我可以看到被移除的对象是否可以留下，取而代之的是踢走别的对象。我的记忆力很差，但是我很快，适用性也强。</p><br>  <h4>Most Recently Used（MRU）：</h4><br>  <p>我是 MRU，和 LRU 是对应的。我会移除最近最多被使用的对象，你一定会问我为什么。好吧，让我告诉你，当一次访问过来的时候，有些事情是无法预测的，并且在缓存系统中找出最少最近使用的对象是一项时间复杂度非常高的运算，这就是为什么我是最好的选择。</p><br>  <p>我是数据库内存缓存中是多么的常见！每当一次缓存记录的使用，我会把它放到栈的顶端。当栈满了的时候，你猜怎么着？我会把栈顶的对象给换成新进来的对象！</p><br>  <h4>First in First out（FIFO）：</h4><br>  <p>我是先进先出，我是一个低负载的算法，并且对缓存对象的管理要求不高。我通过一个队列去跟踪所有的缓存对象，最近最常用的缓存对象放在后面，而更早的缓存对象放在前面，当缓存容量满时，排在前面的缓存对象会被踢走，然后把新的缓存对象加进去。我很快，但是我并不适用。</p><br>  <h4>Second Chance：</h4><br>  <p>大家好，我是 second chance，我是通过 FIFO 修改而来的，被大家叫做 second chance 缓存算法，我比 FIFO 好的地方是我改善了 FIFO 的成本。我是 FIFO 一样也是在观察队列的前端，但是很FIFO的立刻踢出不同，我会检查即将要被踢出的对象有没有之前被使用过的标志（1一个 bit 表示），没有没有被使用过，我就把他踢出；否则，我会把这个标志位清除，然后把这个缓存对象当做新增缓存对象加入队列。你可以想象就这就像一个环队列。当我再一次在队头碰到这个对象时，由于他已经没有这个标志位了，所以我立刻就把他踢开了。我在速度上比 FIFO 快。</p><br>  <h4>CLock：</h4><br>  <p>我是 Clock，一个更好的 FIFO，也比 second chance 更好。因为我不会像 second chance 那样把有标志的缓存对象放到队列的尾部，但是也可以达到 second chance 的效果。</p><br>  <p>我持有一个装有缓存对象的环形列表，头指针指向列表中最老的缓存对象。当缓存 miss 发生并且没有新的缓存空间时，我会问问指针指向的缓存对象的标志位去决定我应该怎么做。如果标志是0，我会直接用新的缓存对象替代这个缓存对象；如果标志位是1，我会把头指针递增，然后重复这个过程，知道新的缓存对象能够被放入。我比 second chance 更快。</p><br>  <h4>Simple time-based：</h4><br>  <p>我是 simple time-based 缓存算法，我通过绝对的时间周期去失效那些缓存对象。对于新增的对象，我会保存特定的时间。我很快，但是我并不适用。</p><br>  <h4>Extended time-based expiration：</h4><br>  <p>我是 extended time-based expiration 缓存算法，我是通过相对时间去失效缓存对象的；对于新增的缓存对象，我会保存特定的时间，比如是每5分钟，每天的12点。</p><br>  <h4>Sliding time-based expiration：</h4><br>  <p>我是 sliding time-based expiration，与前面不同的是，被我管理的缓存对象的生命起点是在这个缓存的最后被访问时间算起的。我很快，但是我也不太适用。</p><br>  <h4>其他的缓存算法还考虑到了下面几点：</h4><br>  <p>成本：如果缓存对象有不同的成本，应该把那些难以获得的对象保存下来。</p><br>  <p>容量：如果缓存对象有不同的大小，应该把那些大的缓存对象清除，这样就可以让更多的小缓存对象进来了。</p><br>  <p>时间：一些缓存还保存着缓存的过期时间。电脑会失效他们，因为他们已经过期了。</p><br>  <p>根据缓存对象的大小而不管其他的缓存算法可能是有必要的。</p> 
-
-  <p>在这一部分中，我们来看看如何实现这些著名的缓存算法。以下的代码只是示例用的，如果你想自己实现缓存算法，可能自己还得加上一些额外的工作。</p> 
-
-  <h4>Random Cache</h4><br>  <p>我是随机缓存，我随意的替换缓存实体，没人敢抱怨。你可以说那个被替换的实体很倒霉。通过这些行为，我随意的去处缓存实体。我比 FIFO 机制好，在某些情况下，我甚至比 LRU 好，但是，通常LRU都会比我好。</p><br><br>  <h4>看看缓存元素（缓存实体）</h4><br>  <p>public class CacheElement</p><br>  <p>{</p><br>  <p>private Object objectValue;</p><br>  <p>private Object objectKey;</p><br>  <p>private int index;</p><br>  <p>private int hitCount; // getters and setters</p><br>  <p>}</p><br>  <p>这个缓存实体拥有缓存的key和value，这个实体的数据结构会被以下所有缓存算法用到。</p><br>  <h4>缓存算法的公用代码</h4> 
-
-<pre><code>public final synchronized void addElement(Object key, Object         value)
+<h3 id="什么是缓存？"><a href="#什么是缓存？" class="headerlink" title="什么是缓存？"></a>什么是缓存？</h3><p>通俗来说，缓存是“存贮数据（使用频繁的数据）的临时地方，因为取原始数据的代价太大了，所以我可以取得快一些。<br>我们都听说过线程池、对象池，缓存可以认为是数据的池，这些数据是从数据库里的真实数据复制出来的，并且为了能别取回，被标上了标签（键 ID）。<br>  <a href="http://img2.tuicool.com/QNvequ.jpg" target="_blank" rel="external">!</a> </p>
+<h4 id="命中"><a href="#命中" class="headerlink" title="命中"></a>命中</h4><p>当客户发起一个请求（我们说他想要查看一个产品信息），我们的应用接受这个请求，并且如果是在第一次检查缓存的时候，需要去数据库读取产品信息。<br>如果在缓存中，一个条目通过一个标记被找到了，这个条目就会被使用、我们就叫它缓存命中。所以，命中率也就不难理解了。</p>
+<h4 id="Cache-Miss"><a href="#Cache-Miss" class="headerlink" title="Cache Miss"></a>Cache Miss</h4><p>但是这里需要注意两点：<br>１. 如果还有缓存的空间，那么，没有命中的对象会被存储到缓存中来。<br>２. 如果缓存慢了，而又没有命中缓存，那么就会按照某一种策略，把缓存中的旧对象踢出，而把新的对象加入缓存池。而这些策略统称为<em>替代策略</em>（缓存算法），这些策略会决定到底应该提出哪些对象。</p>
+<h4 id="存储成本"><a href="#存储成本" class="headerlink" title="存储成本"></a>存储成本</h4><p>当没有命中时，我们会从数据库取出数据，然后放入缓存。而把这个数据放入缓存所需要的时间和空间，就是存储成本。</p>
+<h4 id="索引成本："><a href="#索引成本：" class="headerlink" title="索引成本："></a>索引成本：</h4><p>和存储成本相仿。 </p>
+<h4 id="失效"><a href="#失效" class="headerlink" title="失效"></a>失效</h4><p>当存在缓存中的数据需要更新时，就意味着缓存中的这个数据失效了。</p>
+<h4 id="替代策略"><a href="#替代策略" class="headerlink" title="替代策略"></a>替代策略</h4><p>当缓存没有命中时，并且缓存容量已经满了，就需要在缓存中踢出一个老的条目，加入一条新的条目，而到底应该踢出什么条目，就由替代策略决定。<br>最优替代策略：<br>最优的替代策略就是想把缓存中最没用的条目给踢出去，但是未来是不能够被预知的，所以这种策略是不可能实现的。但是有很多策略，都是朝着这个目前去努力。</p>
+<h2 id="缓存算法"><a href="#缓存算法" class="headerlink" title="缓存算法"></a>缓存算法</h2><p>没有人能说清哪种缓存算法优于其他的缓存算法</p>
+<h3 id="Least-Frequently-Used（LFU）："><a href="#Least-Frequently-Used（LFU）：" class="headerlink" title="Least Frequently Used（LFU）："></a>Least Frequently Used（LFU）：</h3><p>大家好，我是 LFU，我会计算为每个缓存对象计算他们被使用的频率。我会把最不常用的缓存对象踢走。</p>
+<h3 id="Least-Recently-User（LRU）："><a href="#Least-Recently-User（LRU）：" class="headerlink" title="Least Recently User（LRU）："></a>Least Recently User（LRU）：</h3><p>我是 LRU 缓存算法，我把最近最少使用的缓存对象给踢走。<br>我总是需要去了解在什么时候，用了哪个缓存对象。如果有人想要了解我为什么总能把最近最少使用的对象踢掉，是非常困难的。<br>浏览器就是使用了我（LRU）作为缓存算法。新的对象会被放在缓存的顶部，当缓存达到了容量极限，我会把底部的对象踢走，而技巧就是：我会把最新被访问的缓存对象，放到缓存池的顶部。<br>所以，经常被读取的缓存对象就会一直呆在缓存池中。有两种方法可以实现我，array 或者是 linked list。<br>我的速度很快，我也可以被数据访问模式适配。我有一个大家庭，他们都可以完善我，甚至做的比我更好（我确实有时会嫉妒，但是没关系）。我家庭的一些成员包括 LRU2 和 2Q，他们就是为了完善 LRU 而存在的。</p>
+<h3 id="Least-Recently-Used-2（LRU2）："><a href="#Least-Recently-Used-2（LRU2）：" class="headerlink" title="Least Recently Used 2（LRU2）："></a>Least Recently Used 2（LRU2）：</h3><p>我是 Least Recently Used 2，有人叫我最近最少使用 twice，我更喜欢这个叫法。我会把被两次访问过的对象放入缓存池，当缓存池满了之后，我会把有两次最少使用的缓存对象踢走。因为需要跟踪对象2次，访问负载就会随着缓存池的增加而增加。如果把我用在大容量的缓存池中，就会有问题。另外，我还需要跟踪那么不在缓存的对象，因为他们还没有被第二次读取。我比LRU好，而且是 adoptive to access 模式 </p>
+<h3 id="Two-Queues（2Q）："><a href="#Two-Queues（2Q）：" class="headerlink" title="Two Queues（2Q）："></a>Two Queues（2Q）：</h3><p>我是 Two Queues；我把被访问的数据放到 LRU 的缓存中，如果这个对象再一次被访问，我就把他转移到第二个、更大的 LRU 缓存。<br>我踢走缓存对象是为了保持第一个缓存池是第二个缓存池的1/3。当缓存的访问负载是固定的时候，把 LRU 换成 LRU2，就比增加缓存的容量更好。这种机制使得我比 LRU2 更好，我也是 LRU 家族中的一员，而且是 adoptive to access 模式 。 </p>
+<h3 id="Adaptive-Replacement-Cache（ARC）："><a href="#Adaptive-Replacement-Cache（ARC）：" class="headerlink" title="Adaptive Replacement Cache（ARC）："></a>Adaptive Replacement Cache（ARC）：</h3><p>我是 ARC，有人说我是介于 LRU 和 LFU 之间，为了提高效果，我是由2个 LRU 组成，第一个，也就是 L1，包含的条目是最近只被使用过一次的，而第二个 LRU，也就是 L2，包含的是最近被使用过两次的条目。因此， L1 放的是新的对象，而 L2 放的是常用的对象。所以，别人才会认为我是介于 LRU 和 LFU 之间的，不过没关系，我不介意。<br>我被认为是性能最好的缓存算法之一，能够自调，并且是低负载的。我也保存着历史对象，这样，我就可以记住那些被移除的对象，同时，也让我可以看到被移除的对象是否可以留下，取而代之的是踢走别的对象。我的记忆力很差，但是我很快，适用性也强。</p>
+<h3 id="Most-Recently-Used（MRU）："><a href="#Most-Recently-Used（MRU）：" class="headerlink" title="Most Recently Used（MRU）："></a>Most Recently Used（MRU）：</h3><p>我是 MRU，和 LRU 是对应的。我会移除最近最多被使用的对象，你一定会问我为什么。好吧，让我告诉你，当一次访问过来的时候，有些事情是无法预测的，并且在缓存系统中找出最少最近使用的对象是一项时间复杂度非常高的运算，这就是为什么我是最好的选择。<br>我是数据库内存缓存中是多么的常见！每当一次缓存记录的使用，我会把它放到栈的顶端。当栈满了的时候，你猜怎么着？我会把栈顶的对象给换成新进来的对象！</p>
+<h3 id="First-in-First-out（FIFO）："><a href="#First-in-First-out（FIFO）：" class="headerlink" title="First in First out（FIFO）："></a>First in First out（FIFO）：</h3><p>我是先进先出，我是一个低负载的算法，并且对缓存对象的管理要求不高。我通过一个队列去跟踪所有的缓存对象，最近最常用的缓存对象放在后面，而更早的缓存对象放在前面，当缓存容量满时，排在前面的缓存对象会被踢走，然后把新的缓存对象加进去。我很快，但是我并不适用。</p>
+<h3 id="Second-Chance："><a href="#Second-Chance：" class="headerlink" title="Second Chance："></a>Second Chance：</h3><p>大家好，我是 second chance，我是通过 FIFO 修改而来的，被大家叫做 second chance 缓存算法，我比 FIFO 好的地方是我改善了 FIFO 的成本。我是 FIFO 一样也是在观察队列的前端，但是很FIFO的立刻踢出不同，我会检查即将要被踢出的对象有没有之前被使用过的标志（1一个 bit 表示），没有没有被使用过，我就把他踢出；否则，我会把这个标志位清除，然后把这个缓存对象当做新增缓存对象加入队列。你可以想象就这就像一个环队列。当我再一次在队头碰到这个对象时，由于他已经没有这个标志位了，所以我立刻就把他踢开了。我在速度上比 FIFO 快。</p>
+<h3 id="CLock："><a href="#CLock：" class="headerlink" title="CLock："></a>CLock：</h3><p>我是 Clock，一个更好的 FIFO，也比 second chance 更好。因为我不会像 second chance 那样把有标志的缓存对象放到队列的尾部，但是也可以达到 second chance 的效果。<br>我持有一个装有缓存对象的环形列表，头指针指向列表中最老的缓存对象。当缓存 miss 发生并且没有新的缓存空间时，我会问问指针指向的缓存对象的标志位去决定我应该怎么做。如果标志是0，我会直接用新的缓存对象替代这个缓存对象；如果标志位是1，我会把头指针递增，然后重复这个过程，知道新的缓存对象能够被放入。我比 second chance 更快。</p>
+<h3 id="Simple-time-based："><a href="#Simple-time-based：" class="headerlink" title="Simple time-based："></a>Simple time-based：</h3><p>我是 simple time-based 缓存算法，我通过绝对的时间周期去失效那些缓存对象。对于新增的对象，我会保存特定的时间。我很快，但是我并不适用。</p>
+<h3 id="Extended-time-based-expiration："><a href="#Extended-time-based-expiration：" class="headerlink" title="Extended time-based expiration："></a>Extended time-based expiration：</h3><p>我是 extended time-based expiration 缓存算法，我是通过相对时间去失效缓存对象的；对于新增的缓存对象，我会保存特定的时间，比如是每5分钟，每天的12点。 </p>
+<h3 id="Sliding-time-based-expiration："><a href="#Sliding-time-based-expiration：" class="headerlink" title="Sliding time-based expiration："></a>Sliding time-based expiration：</h3><p>我是 sliding time-based expiration，与前面不同的是，被我管理的缓存对象的生命起点是在这个缓存的最后被访问时间算起的。我很快，但是我也不太适用。 </p>
+<h3 id="其他的缓存算法还考虑到了下面几点："><a href="#其他的缓存算法还考虑到了下面几点：" class="headerlink" title="其他的缓存算法还考虑到了下面几点："></a>其他的缓存算法还考虑到了下面几点：</h3><p>成本：如果缓存对象有不同的成本，应该把那些难以获得的对象保存下来。<br>容量：如果缓存对象有不同的大小，应该把那些大的缓存对象清除，这样就可以让更多的小缓存对象进来了。<br>时间：一些缓存还保存着缓存的过期时间。电脑会失效他们，因为他们已经过期了。<br>根据缓存对象的大小而不管其他的缓存算法可能是有必要的。 </p>
+<p>在这一部分中，我们来看看如何实现这些著名的缓存算法。以下的代码只是示例用的，如果你想自己实现缓存算法，可能自己还得加上一些额外的工作。 </p>
+<h3 id="Random-Cache"><a href="#Random-Cache" class="headerlink" title="Random Cache"></a>Random Cache</h3><p>我是随机缓存，我随意的替换缓存实体，没人敢抱怨。你可以说那个被替换的实体很倒霉。通过这些行为，我随意的去处缓存实体。我比 FIFO 机制好，在某些情况下，我甚至比 LRU 好，但是，通常LRU都会比我好。 </p>
+<h3 id="看看缓存元素（缓存实体）"><a href="#看看缓存元素（缓存实体）" class="headerlink" title="看看缓存元素（缓存实体）"></a>看看缓存元素（缓存实体）</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> CacheElement </span><br><span class="line">&#123; </span><br><span class="line"><span class="keyword">private</span> Object objectValue; </span><br><span class="line"><span class="keyword">private</span> Object objectKey; </span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> index; </span><br><span class="line"><span class="keyword">private</span> <span class="keyword">int</span> hitCount; <span class="comment">// getters and setters </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个缓存实体拥有缓存的key和value，这个实体的数据结构会被以下所有缓存算法用到。 </p>
+<h3 id="缓存算法的公用代码"><a href="#缓存算法的公用代码" class="headerlink" title="缓存算法的公用代码"></a>缓存算法的公用代码</h3><pre><code>public final synchronized void addElement(Object key, Object         value)
 {
 int index;
 Object obj;
@@ -370,11 +388,8 @@ element.setObjectKey(key);
 return;
 }
 ｝
-</code></pre>  <p>上面的代码会被所有的缓存算法实现用到。这段代码是用来检查缓存元素是否在缓存中了，如果是，我们就替换它，但是如果我们找不到这个 key 对应的缓存，我们会怎么做呢？那我们就来深入的看看会发生什么吧！</p> 
-
-  <h4>看看随机缓存的实现</h4> 
-
-<pre><code>public final synchronized void addElement(Object key, Object         value)
+</code></pre><p>上面的代码会被所有的缓存算法实现用到。这段代码是用来检查缓存元素是否在缓存中了，如果是，我们就替换它，但是如果我们找不到这个 key 对应的缓存，我们会怎么做呢？那我们就来深入的看看会发生什么吧！ </p>
+<h3 id="看看随机缓存的实现"><a href="#看看随机缓存的实现" class="headerlink" title="看看随机缓存的实现"></a>看看随机缓存的实现</h3><pre><code>public final synchronized void addElement(Object key, Object         value)
 {
 int index;
 Object obj;
@@ -400,9 +415,7 @@ cache[index].setObjectValue(value);
 cache[index].setObjectKey(key);
 table.put(key, cache[index]);
 }
-</code></pre>  <h4>看看FIFO缓算法的实现</h4> 
-
-<pre><code>public final synchronized void addElement(Objectkey, Object         value)
+</code></pre><h3 id="看看FIFO缓算法的实现"><a href="#看看FIFO缓算法的实现" class="headerlink" title="看看FIFO缓算法的实现"></a>看看FIFO缓算法的实现</h3><pre><code>public final synchronized void addElement(Objectkey, Object         value)
 {
 int index;
 Object obj;
@@ -425,7 +438,7 @@ else { // Otherwise, replace the current pointer,
 // entry with the new one.
 index = current;
 // in order to make Circular FIFO
-if (++current &amp;gt;= cache.length)
+if (++current &gt;= cache.length)
 current = 0;
 table.remove(cache[index].getObjectKey());
 }
@@ -433,9 +446,7 @@ cache[index].setObjectValue(value);
 cache[index].setObjectKey(key);
 table.put(key, cache[index]);
 }
-</code></pre>  <h4>看看LFU缓存算法的实现</h4> 
-
-<pre><code>public synchronized Object getElement(Object key)
+</code></pre><h3 id="看看LFU缓存算法的实现"><a href="#看看LFU缓存算法的实现" class="headerlink" title="看看LFU缓存算法的实现"></a>看看LFU缓存算法的实现</h3><pre><code>public synchronized Object getElement(Object key)
 {
 Object obj;
 obj = table.get(key);
@@ -484,7 +495,7 @@ return leastElement;
 public static CacheElement leastHit(CacheElement[] elements)
 {
 CacheElement lowestElement = null;
-for (int i = 0; i &amp;lt; elements.length; i++)
+for (int i = 0; i &lt; elements.length; i++)
 {
 CacheElement element = elements[i];
 if (lowestElement == null)
@@ -492,7 +503,7 @@ if (lowestElement == null)
 lowestElement = element;
 }
 else {
-if (element.getHitCount() &amp;lt; lowestElement.getHitCount())
+if (element.getHitCount() &lt; lowestElement.getHitCount())
 {
 lowestElement = element;
 }
@@ -500,9 +511,66 @@ lowestElement = element;
 }
 return lowestElement;
 }
-</code></pre>  <p>最重点的代码，就应该是 leastHit 这个方法，这段代码就是把</p><br>  <p>hitCount 最低的元素找出来，然后删除，给新进的缓存元素留位置。</p><br>  <h4>看看LRU缓存算法实现</h4><br><br>      private void moveToFront(int index)<br>      {<br>      int nextIndex, prevIndex;<br>      if(head != index)<br>      {<br>      nextIndex = next[index];<br>      prevIndex = prev[index];<br>      // Only the head has a prev entry that is an invalid index<br>      // so we don’t check.<br>      next[prevIndex] = nextIndex;<br>      // Make sure index is valid. If it isn’t, we’re at the tail<br>      // and don’t set prev[next].<br>      if(nextIndex &gt;= 0)<br>      prev[nextIndex] = prevIndex;<br>      else<br>      tail = prevIndex;<br>      prev[index] = -1;<br>      next[index] = head;<br>      prev[head] = index;<br>      head = index;<br>      }<br>      }<br>     public final synchronized void addElement(Object key, Object         value)<br>        {<br>       int index;Object obj;<br>      obj = table.get(key);<br>      if(obj != null)<br>      {<br>      CacheElement entry;<br>      // Just replace the value, but move it to the front.<br>      entry = (CacheElement)obj;<br>      entry.setObjectValue(value);<br>      entry.setObjectKey(key);<br>      moveToFront(entry.getIndex());<br>      return;<br>      }<br>      // If we haven’t filled the cache yet, place in next available<br>      // spot and move to front.<br>      if(!isFull())<br>      {<br>      if(_numEntries &gt; 0)<br>      {<br>      prev[_numEntries] = tail;<br>      next[_numEntries] = -1;<br>      moveToFront(numEntries);<br>      }<br>      ++numEntries;<br>      }<br>      else { // We replace the tail of the list.<br>      table.remove(cache[tail].getObjectKey());<br>      moveToFront(tail);<br>      }<br>      cache[head].setObjectValue(value);<br>      cache[head].setObjectKey(key);<br>      table.put(key, cache[head]);<br>      }<br><br>  <p>这段代码的逻辑如 LRU算法 的描述一样，把再次用到的缓存提取到最前面，而每次删除的都是最后面的元素。</p><br>  <h4>结论</h4><br>  <p>我们已经看到 LFU缓存算法 和 LRU缓存算法的实现方式，至于如何实现，采用数组还是 LinkedHashMap，都由你决定，不够我一般是小的缓存容量用数组，大的用 LinkedHashMap。</p> 
-
-<p>  <p3>几个著名Java开源缓存框架介绍</p3><br>1.OSCache</p>
+</code></pre><p>最重点的代码，就应该是 leastHit 这个方法，这段代码就是把<br>hitCount 最低的元素找出来，然后删除，给新进的缓存元素留位置。 </p>
+<h3 id="看看LRU缓存算法实现"><a href="#看看LRU缓存算法实现" class="headerlink" title="看看LRU缓存算法实现"></a>看看LRU缓存算法实现</h3><pre><code> private void moveToFront(int index)
+ {
+ int nextIndex, prevIndex;
+ if(head != index)
+ {
+ nextIndex = next[index];
+ prevIndex = prev[index];
+ // Only the head has a prev entry that is an invalid index
+ // so we don&apos;t check.
+ next[prevIndex] = nextIndex;
+ // Make sure index is valid. If it isn&apos;t, we&apos;re at the tail
+ // and don&apos;t set prev[next].
+ if(nextIndex &gt;= 0)
+ prev[nextIndex] = prevIndex;
+ else
+ tail = prevIndex;
+ prev[index] = -1;
+ next[index] = head;
+ prev[head] = index;
+ head = index;
+ }
+ }
+public final synchronized void addElement(Object key, Object         value)
+   {
+  int index;Object obj;
+ obj = table.get(key);
+ if(obj != null)
+ {
+ CacheElement entry;
+ // Just replace the value, but move it to the front.
+ entry = (CacheElement)obj;
+ entry.setObjectValue(value);
+ entry.setObjectKey(key);
+ moveToFront(entry.getIndex());
+ return;
+ }
+ // If we haven&apos;t filled the cache yet, place in next available
+ // spot and move to front.
+ if(!isFull())
+ {
+ if(_numEntries&gt; 0)
+ {
+ prev[_numEntries] = tail;
+ next[_numEntries] = -1;
+ moveToFront(numEntries);
+ }
+ ++numEntries;
+ }
+ else { // We replace the tail of the list.
+ table.remove(cache[tail].getObjectKey());
+ moveToFront(tail);
+ }
+ cache[head].setObjectValue(value);
+ cache[head].setObjectKey(key);
+ table.put(key, cache[head]);
+ }
+</code></pre><p>这段代码的逻辑如 LRU算法 的描述一样，把再次用到的缓存提取到最前面，而每次删除的都是最后面的元素。 </p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>我们已经看到 LFU缓存算法 和 LRU缓存算法的实现方式，至于如何实现，采用数组还是 LinkedHashMap，都由你决定，不够我一般是小的缓存容量用数组，大的用 LinkedHashMap。 </p>
+<h2 id="几个著名Java开源缓存框架介绍"><a href="#几个著名Java开源缓存框架介绍" class="headerlink" title="几个著名Java开源缓存框架介绍"></a>几个著名Java开源缓存框架介绍</h2><p>1.OSCache</p>
 <p>　　OSCache是个一个广泛采用的高性能的J2EE缓存框架，OSCache能用于任何Java应用程序的普通的缓存解决方案。 OSCache有以下特点：缓存任何对象，你可以不受限制的缓存部分jsp页面或HTTP请求，任何java对象都可以缓存。拥有全面的API–OSCache API给你全面的程序来控制所有的OSCache特性。永久缓存–缓存能随意的写入硬盘，因此允许昂贵的创建(expensive-to-create)数据来保持缓存，甚至能让应用重启。支持集群–集群缓存数据能被单个的进行参数配置，不需要修改代码。缓存记录的过期–你可以有最大限度的控制缓存对象的过期，包括可插入式的刷新策略(如果默认性能不需要时)。</p>
 <p>2.Java Caching system</p>
 <p>　　JSC(Java Caching system)是一个用分布式的缓存系统，是基于服务器的java应用程序。它是通过提供管理各种动态缓存数据来加速动态web应用。 JCS和其他缓存系统一样，也是一个用于高速读取，低速写入的应用程序。动态内容和报表系统能够获得更好的性能。如果一个网站，有重复的网站结构，使用间歇性更新方式的数据库(而不是连续不断的更新数据库)，被重复搜索出相同结果的，就能够通过执行缓存方式改进其性能和伸缩性。</p>
@@ -735,7 +803,7 @@ return lowestElement;
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">命中：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Cache Miss：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">存储成本：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">索引成本：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">失效：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">替代策略：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">最优替代策略：</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#undefined"><span class="nav-number"></span> <span class="nav-text">缓存算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">1.</span> <span class="nav-text">Least Frequently Used（LFU）：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">2.</span> <span class="nav-text">Least Recently User（LRU）：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">3.</span> <span class="nav-text">Least Recently Used 2（LRU2）：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">4.</span> <span class="nav-text">Two Queues（2Q）：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">5.</span> <span class="nav-text">Adaptive Replacement Cache（ARC）：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">6.</span> <span class="nav-text">Most Recently Used（MRU）：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">7.</span> <span class="nav-text">First in First out（FIFO）：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">8.</span> <span class="nav-text">Second Chance：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">9.</span> <span class="nav-text">CLock：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">10.</span> <span class="nav-text">Simple time-based：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">11.</span> <span class="nav-text">Extended time-based expiration：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">12.</span> <span class="nav-text">Sliding time-based expiration：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">13.</span> <span class="nav-text">其他的缓存算法还考虑到了下面几点：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">14.</span> <span class="nav-text">Random Cache</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">15.</span> <span class="nav-text">看看缓存元素（缓存实体）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">16.</span> <span class="nav-text">缓存算法的公用代码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">17.</span> <span class="nav-text">看看随机缓存的实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">18.</span> <span class="nav-text">看看FIFO缓算法的实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">19.</span> <span class="nav-text">看看LFU缓存算法的实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">20.</span> <span class="nav-text">看看LRU缓存算法实现</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#undefined"><span class="nav-number">21.</span> <span class="nav-text">结论</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#上帝派来了缓存"><span class="nav-number">1.</span> <span class="nav-text">上帝派来了缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是缓存？"><span class="nav-number">2.</span> <span class="nav-text">什么是缓存？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#命中"><span class="nav-number">2.1.</span> <span class="nav-text">命中</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Cache-Miss"><span class="nav-number">2.2.</span> <span class="nav-text">Cache Miss</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#存储成本"><span class="nav-number">2.3.</span> <span class="nav-text">存储成本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#索引成本："><span class="nav-number">2.4.</span> <span class="nav-text">索引成本：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#失效"><span class="nav-number">2.5.</span> <span class="nav-text">失效</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#替代策略"><span class="nav-number">2.6.</span> <span class="nav-text">替代策略</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#缓存算法"><span class="nav-number"></span> <span class="nav-text">缓存算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Least-Frequently-Used（LFU）："><span class="nav-number">1.</span> <span class="nav-text">Least Frequently Used（LFU）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Least-Recently-User（LRU）："><span class="nav-number">2.</span> <span class="nav-text">Least Recently User（LRU）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Least-Recently-Used-2（LRU2）："><span class="nav-number">3.</span> <span class="nav-text">Least Recently Used 2（LRU2）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Two-Queues（2Q）："><span class="nav-number">4.</span> <span class="nav-text">Two Queues（2Q）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adaptive-Replacement-Cache（ARC）："><span class="nav-number">5.</span> <span class="nav-text">Adaptive Replacement Cache（ARC）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Most-Recently-Used（MRU）："><span class="nav-number">6.</span> <span class="nav-text">Most Recently Used（MRU）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#First-in-First-out（FIFO）："><span class="nav-number">7.</span> <span class="nav-text">First in First out（FIFO）：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Second-Chance："><span class="nav-number">8.</span> <span class="nav-text">Second Chance：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CLock："><span class="nav-number">9.</span> <span class="nav-text">CLock：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Simple-time-based："><span class="nav-number">10.</span> <span class="nav-text">Simple time-based：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Extended-time-based-expiration："><span class="nav-number">11.</span> <span class="nav-text">Extended time-based expiration：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sliding-time-based-expiration："><span class="nav-number">12.</span> <span class="nav-text">Sliding time-based expiration：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他的缓存算法还考虑到了下面几点："><span class="nav-number">13.</span> <span class="nav-text">其他的缓存算法还考虑到了下面几点：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Random-Cache"><span class="nav-number">14.</span> <span class="nav-text">Random Cache</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#看看缓存元素（缓存实体）"><span class="nav-number">15.</span> <span class="nav-text">看看缓存元素（缓存实体）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缓存算法的公用代码"><span class="nav-number">16.</span> <span class="nav-text">缓存算法的公用代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#看看随机缓存的实现"><span class="nav-number">17.</span> <span class="nav-text">看看随机缓存的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#看看FIFO缓算法的实现"><span class="nav-number">18.</span> <span class="nav-text">看看FIFO缓算法的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#看看LFU缓存算法的实现"><span class="nav-number">19.</span> <span class="nav-text">看看LFU缓存算法的实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#看看LRU缓存算法实现"><span class="nav-number">20.</span> <span class="nav-text">看看LRU缓存算法实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#结论"><span class="nav-number">21.</span> <span class="nav-text">结论</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几个著名Java开源缓存框架介绍"><span class="nav-number"></span> <span class="nav-text">几个著名Java开源缓存框架介绍</span></a></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

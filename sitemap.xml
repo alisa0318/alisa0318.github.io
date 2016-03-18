@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.ezlippi.com//blog/2015/02/cache.html</loc>
+    
+    <lastmod>2016-03-18T09:38:56.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.ezlippi.com//blog/2015/03/install-texlive-in-ubuntu.html</loc>
     
     <lastmod>2016-03-18T09:21:28.000Z</lastmod>
@@ -117,13 +124,6 @@
     <loc>http://www.ezlippi.com//blog/2014/11/java-inner-class.html</loc>
     
     <lastmod>2016-02-29T13:22:15.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.ezlippi.com//blog/2015/02/cache.html</loc>
-    
-    <lastmod>2016-02-29T13:21:22.000Z</lastmod>
     
   </url>
   
