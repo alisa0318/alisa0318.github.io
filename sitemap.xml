@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.ezlippi.com//blog/2015/03/install-texlive-in-ubuntu.html</loc>
+    
+    <lastmod>2016-03-18T09:21:28.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.ezlippi.com//blog/2014/11/leveldb.html</loc>
     
     <lastmod>2016-03-18T08:50:46.000Z</lastmod>
@@ -222,13 +229,6 @@
     <loc>http://www.ezlippi.com//blog/2015/03/vim-plugins.html</loc>
     
     <lastmod>2016-02-29T12:52:50.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.ezlippi.com//blog/2015/03/install-texlive-in-ubuntu.html</loc>
-    
-    <lastmod>2016-02-29T12:49:22.000Z</lastmod>
     
   </url>
   
