@@ -59,8 +59,7 @@
 
 
 
-<meta name="description" content="整形溢出和提升
-大部分 C 程序员都以为基本的整形操作都是安全的其实不然,看下面这个例子,你觉得输出结果是什么:
+<meta name="description" content="整形溢出和提升大部分 C 程序员都以为基本的整形操作都是安全的其实不然,看下面这个例子,你觉得输出结果是什么:
 int main(int argc, char** argv) {
     long i = -1;
 
@@ -68,13 +67,12 @@ int main(int argc, char** argv) {
          printf(&amp;quot;OK\n&amp;quot;);
     }
     else {
-         pr">
+         pri">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C语言高级编程指南">
 <meta property="og:url" content="http://www.ezlippi.com/blog/2014/07/c-advaced-programming.html">
 <meta property="og:site_name" content="Lippi-浮生志">
-<meta property="og:description" content="整形溢出和提升
-大部分 C 程序员都以为基本的整形操作都是安全的其实不然,看下面这个例子,你觉得输出结果是什么:
+<meta property="og:description" content="整形溢出和提升大部分 C 程序员都以为基本的整形操作都是安全的其实不然,看下面这个例子,你觉得输出结果是什么:
 int main(int argc, char** argv) {
     long i = -1;
 
@@ -82,12 +80,11 @@ int main(int argc, char** argv) {
          printf(&amp;quot;OK\n&amp;quot;);
     }
     else {
-         pr">
-<meta property="og:updated_time" content="2016-02-29T12:32:34.000Z">
+         pri">
+<meta property="og:updated_time" content="2016-03-18T08:32:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C语言高级编程指南">
-<meta name="twitter:description" content="整形溢出和提升
-大部分 C 程序员都以为基本的整形操作都是安全的其实不然,看下面这个例子,你觉得输出结果是什么:
+<meta name="twitter:description" content="整形溢出和提升大部分 C 程序员都以为基本的整形操作都是安全的其实不然,看下面这个例子,你觉得输出结果是什么:
 int main(int argc, char** argv) {
     long i = -1;
 
@@ -95,7 +92,7 @@ int main(int argc, char** argv) {
          printf(&amp;quot;OK\n&amp;quot;);
     }
     else {
-         pr">
+         pri">
 
 
 
@@ -377,8 +374,7 @@ int main(int argc, char** argv) {
       
 
       
-        <p><strong>整形溢出和提升</strong></p>
-<p>大部分 C 程序员都以为基本的整形操作都是安全的其实不然,看下面这个例子,<br>你觉得输出结果是什么:</p>
+        <h2 id="整形溢出和提升"><a href="#整形溢出和提升" class="headerlink" title="整形溢出和提升"></a>整形溢出和提升</h2><p>大部分 C 程序员都以为基本的整形操作都是安全的其实不然,看下面这个例子,<br>你觉得输出结果是什么:</p>
 <pre><code>int main(int argc, char** argv) {
     long i = -1;
 
@@ -408,9 +404,7 @@ int main(int argc, char** argv) {
 <pre><code>char c = 128;
 char d = 129;
 printf(&quot;%d,%d\n&quot;,c,d);
-</code></pre><hr>
-<p>##内存管理和分配</p>
-<p>malloc 函数分配制定字节大小的内存,对象未被初始化,如果 size 是 0 取<br>决与系统实现。malloc(0)返回一个空指针或者 unique pointer,如果 size 是表达式的运算结果,确保没有整形溢出。</p>
+</code></pre><h2 id="内存管理和分配"><a href="#内存管理和分配" class="headerlink" title="内存管理和分配"></a>内存管理和分配</h2><p>malloc 函数分配制定字节大小的内存,对象未被初始化,如果 size 是 0 取<br>决与系统实现。malloc(0)返回一个空指针或者 unique pointer,如果 size 是表达式的运算结果,确保没有整形溢出。</p>
 <blockquote>
 <p>“If the size of the space requested is 0, the behavior is<br>implementation- defined: the value returned shall be either a null<br>pointer or a unique pointer.”</p>
 </blockquote>
@@ -500,8 +494,7 @@ int grow_vector(struct vector *vc) {
     return VECTOR_OK;
 }
 </code></pre><hr>
-<p>##避免重大错误</p>
-<ol>
+<h2 id="避免重大错误"><a href="#避免重大错误" class="headerlink" title="避免重大错误"></a>避免重大错误</h2><ol>
 <li><p>使用未初始化的变量，<br>C语言要求所有变量在使用之前要初始化，使用未初始化的变量会造成为定义的行为，这和C++不同，C++保证所有变量在使用之前都得到初始化，Java<strong>尽量保证</strong>变量使用前的得到初始化，如类基本数据成员会被初始化为默认值。</p>
 </li>
 <li><p>free错误<br>对空指针调用 free,对不是由 malloc family 函数分配的指针调用 free,或者对<br>已经调用 free 的指针再次调用 free。<br>一开始初始化指针为NULL可以减少错误,GCC和Clang编译器有-Wuninitialized 选项来对未初始化的变量显示警告信息,另外不要将同一个指针用于静态变量和动态变量。</p>
@@ -521,8 +514,7 @@ void nullfree(void **pptr) {
 <p>4.违反类型规则</p>
 <p>把int×指针cast成float×，然后对它解引用，在C里面会引发undefined behavior，C规定这种类型的转换需要使用memset，C++里面有个reinterpret_cast函数用于无关类型之间的转换，reinterpret_cast <new_type> (expression)</new_type></p>
 <hr>
-<p>##防止内存泄漏</p>
-<p>内存泄漏发生在程序不再使用的动态内存没有得到释放，这需要我们掌握动态分配对象的作用域，尤其是什么时候该调用free来释放内存，常用的集中方法如下：</p>
+<h2 id="防止内存泄漏"><a href="#防止内存泄漏" class="headerlink" title="防止内存泄漏"></a>防止内存泄漏</h2><p>内存泄漏发生在程序不再使用的动态内存没有得到释放，这需要我们掌握动态分配对象的作用域，尤其是什么时候该调用free来释放内存，常用的集中方法如下：</p>
 <ol>
 <li><p>在程序启动的时候分配<br>在程序启动的时候分配需要的heap memory，程序退出时把释放的任务交给操作系统，这种方法一般适用于程序运行后马上退出的那种。</p>
 </li>
@@ -657,8 +649,7 @@ free(pool);
 }
 </code></pre><p> 5.垃圾回收机制<br> 引用计数采用的方法是当内存不再需要时得到手动释放，垃圾回收发生在内存分配失败或者内存到达一定的水位（watermarks），实现垃圾回收最简单的一个算法是MARK AND SWEEP算法，该算法的思路是遍历所有动态分配对象的内存，标记那些还能继续使用的，回收那些没有被标记的内存。<br>    Java采用的垃圾回收机制就更复杂了，思路也是回收那些不再使用的内存，JAVA的垃圾回收和C++的析构函数又不一样，C++保证对象在使用之前得到初始化，对象超出作用域之后内存得到释放，而JAVA不能保证对象一定被析构。 </p>
 <hr>
-<p>##指针和数组</p>
-<p>我们一般的概念里指针和数组名是可互换的，但是在编译器里他们被不同的对待，当我们说一个对象或者表达式具有某种类型的时候我们一般是说这个对象是个左值（lvalue），当对象不是const的时候，左值是可以修改的，比如对象是复制操作符的左参数，而数组名是一个const左值，指向地一个元素的const指针，所以你不能给数组名赋值或者意图改变数组名，如果表达式是数组类型，数组名通常转换成指向地一个元素的指针。</p>
+<h2 id="指针和数组"><a href="#指针和数组" class="headerlink" title="指针和数组"></a>指针和数组</h2><p>我们一般的概念里指针和数组名是可互换的，但是在编译器里他们被不同的对待，当我们说一个对象或者表达式具有某种类型的时候我们一般是说这个对象是个左值（lvalue），当对象不是const的时候，左值是可以修改的，比如对象是复制操作符的左参数，而数组名是一个const左值，指向地一个元素的const指针，所以你不能给数组名赋值或者意图改变数组名，如果表达式是数组类型，数组名通常转换成指向地一个元素的指针。</p>
 <p>但是也有例外，什么情况下数组名不是一个指针呢？<br>1.当它是sizeof操作符的操作数时，返回数组占的内存字节数<br>2.当它是取地址操作&amp;的操作数时，返回一个数组的地址</p>
 <p>看下面这个例子：</p>
 <pre><code>short a[] = {1,2,3};
@@ -898,7 +889,7 @@ a=c;//非法的，你不能修改const指针的值
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#整形溢出和提升"><span class="nav-number">1.</span> <span class="nav-text">整形溢出和提升</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存管理和分配"><span class="nav-number">2.</span> <span class="nav-text">内存管理和分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#避免重大错误"><span class="nav-number">3.</span> <span class="nav-text">避免重大错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防止内存泄漏"><span class="nav-number">4.</span> <span class="nav-text">防止内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指针和数组"><span class="nav-number">5.</span> <span class="nav-text">指针和数组</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

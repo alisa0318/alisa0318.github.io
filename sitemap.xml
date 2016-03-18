@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.ezlippi.com//blog/2014/07/c-advaced-programming.html</loc>
+    
+    <lastmod>2016-03-18T08:32:35.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.ezlippi.com//blog/2014/07/markdown-syntax.html</loc>
     
     <lastmod>2016-03-18T07:31:33.000Z</lastmod>
@@ -390,13 +397,6 @@
     <loc>http://www.ezlippi.com//blog/2014/07/qualified-programmer-should-read-what-books.html</loc>
     
     <lastmod>2016-02-29T12:32:57.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.ezlippi.com//blog/2014/07/c-advaced-programming.html</loc>
-    
-    <lastmod>2016-02-29T12:32:34.000Z</lastmod>
     
   </url>
   
