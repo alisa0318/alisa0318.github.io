@@ -78,7 +78,7 @@
 <meta property="og:image" content="http://www.ezlippi.com/images/images/githubpages/level11.png">
 <meta property="og:image" content="http://www.ezlippi.com/images/images/githubpages/level12.png">
 <meta property="og:image" content="http://www.ezlippi.com/images/images/githubpages/level3.png">
-<meta property="og:updated_time" content="2016-02-29T12:36:27.000Z">
+<meta property="og:updated_time" content="2016-03-18T08:50:46.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="leveldb原理剖析">
 <meta name="twitter:description" content="google开源库">
@@ -355,9 +355,7 @@
 <p>　　Jeff Dean其人：<a href="http://research.google.com/people/jeff/index.html" target="_blank" rel="external">http://research.google.com/people/jeff/index.html</a>，Google大规模分布式平台Bigtable和MapReduce主要设计和实现者。</p>
 <p>　　Sanjay Ghemawat其人：<a href="http://research.google.com/people/sanjay/index.html" target="_blank" rel="external">http://research.google.com/people/sanjay/index.html</a>，Google大规模分布式平台GFS，Bigtable和MapReduce主要设计和实现工程师。<br><a id="more"></a><br>　　LevelDb就是这两位大神级别的工程师发起的开源项目，简而言之，LevelDb是能够处理十亿级别规模Key-Value型数据持久性存储的C++ 程序库。正像上面介绍的，这二位是Bigtable的设计和实现者，如果了解Bigtable的话，应该知道在这个影响深远的分布式存储系统中有两个核心的部分：Master Server和Tablet Server。其中Master Server做一些管理数据的存储以及分布式调度工作，实际的分布式数据存储以及读写操作是由Tablet Server完成的，而LevelDb则可以理解为一个简化版的Tablet Server。</p>
 <hr>
-<hr>
-<p>##LevelDb剖析之一：介绍</p>
-<p>　　LevelDb有如下一些特点：</p>
+<h2 id="LevelDb剖析之一：介绍"><a href="#LevelDb剖析之一：介绍" class="headerlink" title="LevelDb剖析之一：介绍"></a>LevelDb剖析之一：介绍</h2><p>　　LevelDb有如下一些特点：</p>
 <p>　　　　首先，LevelDb是一个持久化存储的KV系统，和Redis这种内存型的KV系统不同，LevelDb不会像Redis一样狂吃内存，而是将大部分数据存储到磁盘上。</p>
 <p>　　　　其次，LevleDb在存储数据时，是根据记录的key值有序存储的，就是说相邻的key值在存储文件中是依次顺序存储的，而应用可以自定义key大小比较函数，LevleDb会按照用户定义的比较函数依序存储这些记录。</p>
 <p>　　　　再次，像大多数KV系统一样，LevelDb的操作接口很简单，基本操作包括写记录，读记录以及删除记录。也支持针对多条操作的原子批量操作。</p>
@@ -366,8 +364,7 @@
 <p>　　LevelDb性能非常突出，官方网站报道其随机写性能达到40万条记录每秒，而随机读性能达到6万条记录每秒。总体来说，LevelDb的写操作要大大快于读操作，而顺序读写操作则大大快于随机读写操作。</p>
 <hr>
 <hr>
-<p>##LevelDb剖析之二：整体架构</p>
-<p>LevelDb本质上是一套存储系统以及在这套存储系统上提供的一些操作接口。为了便于理解整个系统及其处理流程，我们可以从两个不同的角度来看待LevleDb：静态角度和动态角度。从静态角度，可以假想整个系统正在运行过程中（不断插入删除读取数据），此时我们给LevelDb照相，从照片可以看到之前系统的数据在内存和磁盘中是如何分布的，处于什么状态等；从动态的角度，主要是了解系统是如何写入一条记录，读出一条记录，删除一条记录的，同时也包括除了这些接口操作外的内部操作比如compaction，系统运行时崩溃后如何恢复系统等等方面。</p>
+<h2 id="LevelDb剖析之二：整体架构"><a href="#LevelDb剖析之二：整体架构" class="headerlink" title="LevelDb剖析之二：整体架构"></a>LevelDb剖析之二：整体架构</h2><p>LevelDb本质上是一套存储系统以及在这套存储系统上提供的一些操作接口。为了便于理解整个系统及其处理流程，我们可以从两个不同的角度来看待LevleDb：静态角度和动态角度。从静态角度，可以假想整个系统正在运行过程中（不断插入删除读取数据），此时我们给LevelDb照相，从照片可以看到之前系统的数据在内存和磁盘中是如何分布的，处于什么状态等；从动态的角度，主要是了解系统是如何写入一条记录，读出一条记录，删除一条记录的，同时也包括除了这些接口操作外的内部操作比如compaction，系统运行时崩溃后如何恢复系统等等方面。</p>
 <p>本节所讲的整体架构主要从静态角度来描述，之后接下来的几节内容会详述静态结构涉及到的文件或者内存数据结构，LevelDb剖析后半部分主要介绍动态视角下的LevelDb，就是说整个系统是怎么运转起来的。</p>
 <p>LevelDb作为存储系统，数据记录的存储介质包括内存以及磁盘文件，如果像上面说的，当LevelDb运行了一段时间，此时我们给LevelDb进行透视拍照，那么您会看到如下一番景象：<br><img src="/images/images/githubpages/level1.png" alt=""><br>图1.1：LevelDb结构</p>
 <p>从图中可以看出，构成LevelDb静态结构的包括六个主要部分：内存中的MemTable和Immutable MemTable以及磁盘上的几种主要文件：Current文件，Manifest文件，log文件以及SSTable文件。当然，LevelDb除了这六个主要部分还有一些辅助的文件，但是以上六个文件和数据结构是LevelDb的主体构成元素。</p>
@@ -382,8 +379,7 @@
 <p>以上介绍的内容就构成了LevelDb的整体静态结构，在LevelDb剖析接下来的内容中，我们会首先介绍重要文件或者内存数据的具体数据布局与结构。</p>
 <hr>
 <hr>
-<p>##LevelDb剖析之三：log文件</p>
-<p>上节内容讲到log文件在LevelDb中的主要作用是系统故障恢复时，能够保证不会丢失数据。因为在将记录写入内存的Memtable之前，会先写入Log文件，这样即使系统发生故障，Memtable中的数据没有来得及Dump到磁盘的SSTable文件，LevelDB也可以根据log文件恢复内存的Memtable数据结构内容，不会造成系统丢失数据，在这点上LevelDb和Bigtable是一致的。</p>
+<h2 id="LevelDb剖析之三：log文件"><a href="#LevelDb剖析之三：log文件" class="headerlink" title="LevelDb剖析之三：log文件"></a>LevelDb剖析之三：log文件</h2><p>上节内容讲到log文件在LevelDb中的主要作用是系统故障恢复时，能够保证不会丢失数据。因为在将记录写入内存的Memtable之前，会先写入Log文件，这样即使系统发生故障，Memtable中的数据没有来得及Dump到磁盘的SSTable文件，LevelDB也可以根据log文件恢复内存的Memtable数据结构内容，不会造成系统丢失数据，在这点上LevelDb和Bigtable是一致的。</p>
 <p>下面我们带大家看看log文件的具体物理和逻辑布局是怎样的，LevelDb对于一个log文件，会把它切割成以32K为单位的物理Block，每次读取的单位以一个Block作为基本读取单位，下图展示的log文件由3个Block构成，所以从物理布局来讲，一个log文件就是由连续的32K大小Block构成的。<br><img src="/images/images/githubpages/level3.png" alt=""><br>图3.1 log文件布局</p>
 <p>在应用的视野里是看不到这些Block的，应用看到的是一系列的Key:Value对，在LevelDb内部，会将一个Key:Value对看做一条记录的数据，另外在这个数据前增加一个记录头，用来记载一些管理信息，以方便内部处理</p>
 <p>记录头包含三个字段，ChechSum是对“类型”和“数据”字段的校验码，为了避免处理不完整或者是被破坏的数据，当LevelDb读取记录数据时候会对数据进行校验，如果发现和存储的CheckSum相同，说明数据完整无破坏，可以继续后续流程。“记录长度”记载了数据的大小，“数据”则是上面讲的Key:Value数值对，“类型”字段则指出了每条记录的逻辑结构和log文件物理分块结构之间的关系，具体而言，主要有以下四种类型：FULL/FIRST/MIDDLE/LAST。</p>
@@ -392,8 +388,7 @@
 <p>从这个小例子可以看出逻辑记录和物理Block之间的关系，LevelDb一次物理读取为一个Block，然后根据类型情况拼接出逻辑记录，供后续流程处理。</p>
 <hr>
 <hr>
-<p>##LevelDb剖析之四：SSTable文件</p>
-<p> 　　SSTable是Bigtable中至关重要的一块，对于LevelDb来说也是如此，对LevelDb的SSTable实现细节的了解也有助于了解Bigtable中一些实现细节。</p>
+<h2 id="LevelDb剖析之四：SSTable文件"><a href="#LevelDb剖析之四：SSTable文件" class="headerlink" title="LevelDb剖析之四：SSTable文件"></a>LevelDb剖析之四：SSTable文件</h2><p> 　　SSTable是Bigtable中至关重要的一块，对于LevelDb来说也是如此，对LevelDb的SSTable实现细节的了解也有助于了解Bigtable中一些实现细节。</p>
 <p>本节内容主要讲述SSTable的静态布局结构，我们曾在“LevelDb剖析之二：整体架构”中说过，SSTable文件形成了不同Level的层级结构，至于这个层级结构是如何形成的我们放在后面Compaction一节细说。本节主要介绍SSTable某个文件的物理布局和逻辑布局结构，这对了解LevelDb的运行过程很有帮助。</p>
 <p>　　LevelDb不同层级有很多SSTable文件（以后缀.sst为特征），所有.sst文件内部布局都是一样的。上节介绍Log文件是物理分块的，SSTable也一样会将文件划分为固定大小的物理存储块，但是两者逻辑布局大不相同，根本原因是：Log文件中的记录是Key无序的，即先后记录的key大小没有明确大小关系，而.sst文件内部则是根据记录的Key由小到大排列的，从下面介绍的SSTable布局可以体会到Key有序是为何如此设计.sst文件结构的关键。<br><img src="/images/images/githubpages/level4.png" alt=""><br>图4.1 .sst文件的分块结构</p>
 <p>　　图4.1展示了一个.sst文件的物理划分结构，同Log文件一样，也是划分为固定大小的存储块，每个Block分为三个部分，红色部分是数据存储区， 蓝色的Type区用于标识数据存储区是否采用了数据压缩算法（Snappy压缩或者无压缩两种），CRC部分则是数据校验码，用于判别数据是否在生成和传输中出错。</p>
@@ -409,26 +404,23 @@
 <p>　　上面讲的这些就是.sst文件的全部内部奥秘。</p>
 <hr>
 <hr>
-<p>##LevelDb剖析之五：MemTable详解</p>
-<p> 　　LevelDb剖析前述小节大致讲述了磁盘文件相关的重要静态结构，本小节讲述内存中的数据结构Memtable，Memtable在整个体系中的重要地位也不言而喻。总体而言，所有KV数据都是存储在Memtable，Immutable Memtable和SSTable中的，Immutable Memtable从结构上讲和Memtable是完全一样的，区别仅仅在于其是只读的，不允许写入操作，而Memtable则是允许写入和读取的。当Memtable写入的数据占用内存到达指定数量，则自动转换为Immutable Memtable，等待Dump到磁盘中，系统会自动生成新的Memtable供写操作写入新数据，理解了Memtable，那么Immutable Memtable自然不在话下。</p>
+<h2 id="LevelDb剖析之五：MemTable详解"><a href="#LevelDb剖析之五：MemTable详解" class="headerlink" title="LevelDb剖析之五：MemTable详解"></a>LevelDb剖析之五：MemTable详解</h2><p> 　　LevelDb剖析前述小节大致讲述了磁盘文件相关的重要静态结构，本小节讲述内存中的数据结构Memtable，Memtable在整个体系中的重要地位也不言而喻。总体而言，所有KV数据都是存储在Memtable，Immutable Memtable和SSTable中的，Immutable Memtable从结构上讲和Memtable是完全一样的，区别仅仅在于其是只读的，不允许写入操作，而Memtable则是允许写入和读取的。当Memtable写入的数据占用内存到达指定数量，则自动转换为Immutable Memtable，等待Dump到磁盘中，系统会自动生成新的Memtable供写操作写入新数据，理解了Memtable，那么Immutable Memtable自然不在话下。</p>
 <p> 　　LevelDb的MemTable提供了将KV数据写入，删除以及读取KV记录的操作接口，但是事实上Memtable并不存在真正的删除操作,删除某个Key的Value在Memtable内是作为插入一条记录实施的，但是会打上一个Key的删除标记，真正的删除操作是Lazy的，会在以后的Compaction过程中去掉这个KV。</p>
 <p> 　　需要注意的是，LevelDb的Memtable中KV对是根据Key大小有序存储的，在系统插入新的KV时，LevelDb要把这个KV插到合适的位置上以保持这种Key有序性。其实，LevelDb的Memtable类只是一个接口类，真正的操作是通过背后的SkipList来做的，包括插入操作和读取操作等，所以Memtable的核心数据结构是一个SkipList。</p>
 <p> 　　SkipList是由William Pugh发明。他在Communications of the ACM June 1990, 33(6) 668-676 发表了Skip lists: a probabilistic alternative to balanced trees，在该论文中详细解释了SkipList的数据结构和插入删除操作。</p>
 <p>SkipList是平衡树的一种替代数据结构，但是和红黑树不相同的是，SkipList对于树的平衡的实现是基于一种随机化的算法的，这样也就是说SkipList的插入和删除的工作是比较简单的。</p>
-<p>关于SkipList的详细介绍可以参考这篇文章，<a href="http://lippiouyangonline.info/skip-list/" target="_blank" rel="external">skip-list原理解析</a>讲述的很清楚，LevelDb的SkipList基本上是一个具体实现，并无特殊之处。</p>
+<p>关于SkipList的详细介绍可以参考这篇文章，<a href="http://coolshell.info/skip-list/" target="_blank" rel="external">skip-list原理解析</a>讲述的很清楚，LevelDb的SkipList基本上是一个具体实现，并无特殊之处。</p>
 <p>　　SkipList不仅是维护有序数据的一个简单实现，而且相比较平衡树来说，在插入数据的时候可以避免频繁的树节点调整操作，所以写入效率是很高的，LevelDb整体而言是个高写入系统，SkipList在其中应该也起到了很重要的作用。Redis为了加快插入操作，也使用了SkipList来作为内部实现数据结构。</p>
 <hr>
 <hr>
-<p>##LevelDb剖析之六 写入与删除记录</p>
-<p>在之前的五节LevelDb剖析中，我们介绍了LevelDb的一些静态文件及其详细布局，从本节开始，我们看看LevelDb的一些动态操作，比如读写记录，Compaction，错误恢复等操作。</p>
+<h2 id="LevelDb剖析之六-写入与删除记录"><a href="#LevelDb剖析之六-写入与删除记录" class="headerlink" title="LevelDb剖析之六 写入与删除记录"></a>LevelDb剖析之六 写入与删除记录</h2><p>在之前的五节LevelDb剖析中，我们介绍了LevelDb的一些静态文件及其详细布局，从本节开始，我们看看LevelDb的一些动态操作，比如读写记录，Compaction，错误恢复等操作。</p>
 <p>本节介绍levelDb的记录更新操作，即插入一条KV记录或者删除一条KV记录。levelDb的更新操作速度是非常快的，源于其内部机制决定了这种更新操作的简单性。<br><img src="/images/images/githubpages/level9.png" alt=""><br>图6.1 LevelDb写入记录</p>
 <p>图6.1是levelDb如何更新KV数据的示意图，从图中可以看出，对于一个插入操作Put(Key,Value)来说，完成插入操作包含两个具体步骤：首先是将这条KV记录以顺序写的方式追加到之前介绍过的log文件末尾，因为尽管这是一个磁盘读写操作，但是文件的顺序追加写入效率是很高的，所以并不会导致写入速度的降低；第二个步骤是:如果写入log文件成功，那么将这条KV记录插入内存中的Memtable中，前面介绍过，Memtable只是一层封装，其内部其实是一个Key有序的SkipList列表，插入一条新记录的过程也很简单，即先查找合适的插入位置，然后修改相应的链接指针将新记录插入即可。完成这一步，写入记录就算完成了，所以一个插入记录操作涉及一次磁盘文件追加写和内存SkipList插入操作，这是为何levelDb写入速度如此高效的根本原因。</p>
 <p>从上面的介绍过程中也可以看出：log文件内是key无序的，而Memtable中是key有序的。那么如果是删除一条KV记录呢？对于levelDb来说，并不存在立即删除的操作，而是与插入操作相同的，区别是，插入操作插入的是Key:Value 值，而删除操作插入的是“Key:删除标记”，并不真正去删除记录，而是后台Compaction的时候才去做真正的删除操作。</p>
 <p>levelDb的写入操作就是如此简单。真正的麻烦在后面将要介绍的读取操作中。</p>
 <hr>
 <hr>
-<p>##LevelDb剖析之七：读取记录</p>
-<p> 　　LevelDb是针对大规模Key/Value数据的单机存储库，从应用的角度来看，LevelDb就是一个存储工具。而作为称职的存储工具，常见的调用接口无非是新增KV，删除KV，读取KV，更新Key对应的Value值这么几种操作。LevelDb的接口没有直接支持更新操作的接口，如果需要更新某个Key的Value,你可以选择直接生猛地插入新的KV，保持Key相同，这样系统内的key对应的value就会被更新；或者你可以先删除旧的KV， 之后再插入新的KV，这样比较委婉地完成KV的更新操作。</p>
+<h2 id="LevelDb剖析之七：读取记录"><a href="#LevelDb剖析之七：读取记录" class="headerlink" title="LevelDb剖析之七：读取记录"></a>LevelDb剖析之七：读取记录</h2><p> 　　LevelDb是针对大规模Key/Value数据的单机存储库，从应用的角度来看，LevelDb就是一个存储工具。而作为称职的存储工具，常见的调用接口无非是新增KV，删除KV，读取KV，更新Key对应的Value值这么几种操作。LevelDb的接口没有直接支持更新操作的接口，如果需要更新某个Key的Value,你可以选择直接生猛地插入新的KV，保持Key相同，这样系统内的key对应的value就会被更新；或者你可以先删除旧的KV， 之后再插入新的KV，这样比较委婉地完成KV的更新操作。</p>
 <p>假设应用提交一个Key值，下面我们看看LevelDb是如何从存储的数据中读出其对应的Value值的。图7-1是LevelDb读取过程的整体示意图。<br><img src="/images/images/githubpages/level10.png" alt=""><br>图7-1  LevelDb读取记录流程</p>
 <p>　　LevelDb首先会去查看内存中的Memtable，如果Memtable中包含key及其对应的value，则返回value值即可；如果在Memtable没有读到key，则接下来到同样处于内存中的Immutable Memtable中去读取，类似地，如果读到就返回，若是没有读到,那么只能万般无奈下从磁盘中的大量SSTable文件中查找。因为SSTable数量较多，而且分成多个Level，所以在SSTable中读数据是相当蜿蜒曲折的一段旅程。总的读取原则是这样的：首先从属于level 0的文件中查找，如果找到则返回对应的value值，如果没有找到那么到level 1中的文件中去找，如此循环往复，直到在某层SSTable文件中找到这个key对应的value为止（或者查到最高level，查找失败，说明整个系统中不存在这个Key)。</p>
 <p> 　　那么为什么是从Memtable到Immutable Memtable，再从Immutable Memtable到文件，而文件中为何是从低level到高level这么一个查询路径呢？道理何在？之所以选择这么个查询路径，是因为从信息的更新时间来说，很明显Memtable存储的是最新鲜的KV对；Immutable Memtable中存储的KV数据对的新鲜程度次之；而所有SSTable文件中的KV数据新鲜程度一定不如内存中的Memtable和Immutable Memtable的。对于SSTable文件来说，如果同时在level L和Level L+1找到同一个key，level L的信息一定比level L+1的要新。也就是说，上面列出的查找路径就是按照数据新鲜程度排列出来的，越新鲜的越先查找。</p>
@@ -439,8 +431,7 @@
 <p>　　从之前介绍的LevelDb的写操作和这里介绍的读操作可以看出，相对写操作，读操作处理起来要复杂很多，所以写的速度必然要远远高于读数据的速度，也就是说，LevelDb比较适合写操作多于读操作的应用场合。而如果应用是很多读操作类型的，那么顺序读取效率会比较高，因为这样大部分内容都会在缓存中找到，尽可能避免大量的随机读取操作。</p>
 <hr>
 <hr>
-<p>##LevelDb剖析之八：Compaction操作</p>
-<p>前文有述，对于LevelDb来说，写入记录操作很简单，删除记录仅仅写入一个删除标记就算完事，但是读取记录比较复杂，需要在内存以及各个层级文件中依照新鲜程度依次查找，代价很高。为了加快读取速度，levelDb采取了compaction的方式来对已有的记录进行整理压缩，通过这种方式，来删除掉一些不再有效的KV数据，减小数据规模，减少文件数量等。</p>
+<h2 id="LevelDb剖析之八：Compaction操作"><a href="#LevelDb剖析之八：Compaction操作" class="headerlink" title="LevelDb剖析之八：Compaction操作"></a>LevelDb剖析之八：Compaction操作</h2><p>前文有述，对于LevelDb来说，写入记录操作很简单，删除记录仅仅写入一个删除标记就算完事，但是读取记录比较复杂，需要在内存以及各个层级文件中依照新鲜程度依次查找，代价很高。为了加快读取速度，levelDb采取了compaction的方式来对已有的记录进行整理压缩，通过这种方式，来删除掉一些不再有效的KV数据，减小数据规模，减少文件数量等。</p>
 <p>levelDb的compaction机制和过程与Bigtable所讲述的是基本一致的，Bigtable中讲到三种类型的compaction: minor ，major和full。所谓minor Compaction，就是把memtable中的数据导出到SSTable文件中；major compaction就是合并不同层级的SSTable文件，而full compaction就是将所有SSTable进行合并。</p>
 <p> LevelDb包含其中两种，minor和major。</p>
 <p>我将为大家详细叙述其机理。</p>
@@ -456,15 +447,13 @@
 <p>　　那么在major compaction过程中，判断一个KV记录是否抛弃的标准是什么呢？其中一个标准是:对于某个key来说，如果在小于L层中存在这个Key，那么这个KV在major compaction过程中可以抛掉。因为我们前面分析过，对于层级低于L的文件中如果存在同一Key的记录，那么说明对于Key来说，有更新鲜的Value存在，那么过去的Value就等于没有意义了，所以可以删除。</p>
 <hr>
 <hr>
-<p>##LevelDb剖析之九 levelDb中的Cache</p>
-<p>　　书接前文，前面讲过对于levelDb来说，读取操作如果没有在内存的memtable中找到记录，要多次进行磁盘访问操作。假设最优情况，即第一次就在level 0中最新的文件中找到了这个key，那么也需要读取2次磁盘，一次是将SSTable的文件中的index部分读入内存，这样根据这个index可以确定key是在哪个block中存储；第二次是读入这个block的内容，然后在内存中查找key对应的value。</p>
+<h2 id="LevelDb剖析之九-levelDb中的Cache"><a href="#LevelDb剖析之九-levelDb中的Cache" class="headerlink" title="LevelDb剖析之九 levelDb中的Cache"></a>LevelDb剖析之九 levelDb中的Cache</h2><p>　　书接前文，前面讲过对于levelDb来说，读取操作如果没有在内存的memtable中找到记录，要多次进行磁盘访问操作。假设最优情况，即第一次就在level 0中最新的文件中找到了这个key，那么也需要读取2次磁盘，一次是将SSTable的文件中的index部分读入内存，这样根据这个index可以确定key是在哪个block中存储；第二次是读入这个block的内容，然后在内存中查找key对应的value。</p>
 <p>　　levelDb中引入了两个不同的Cache:Table Cache和Block Cache。其中Block Cache是配置可选的，即在配置文件中指定是否打开这个功能。<br><img src="/images/images/githubpages/level3.png" alt=""><br>图9.1 table cache</p>
 <p> 　　图9.1是table cache的结构。在Cache中，key值是SSTable的文件名称，Value部分包含两部分，一个是指向磁盘打开的SSTable文件的文件指针，这是为了方便读取内容；另外一个是指向内存中这个SSTable文件对应的Table结构指针，table结构在内存中，保存了SSTable的index内容以及用来指示block cache用的cache_id ,当然除此外还有其它一些内容。</p>
 <p>　　比如在get(key)读取操作中，如果levelDb确定了key在某个level下某个文件A的key range范围内，那么需要判断是不是文件A真的包含这个KV。此时，levelDb会首先查找Table Cache，看这个文件是否在缓存里，如果找到了，那么根据index部分就可以查找是哪个block包含这个key。如果没有在缓存中找到文件，那么打开SSTable文件，将其index部分读入内存，然后插入Cache里面，去index里面定位哪个block包含这个Key 。如果确定了文件哪个block包含这个key，那么需要读入block内容，这是第二次读取。</p>
 <p> 　　Block Cache是为了加快这个过程的，图9.2是其结构示意图。其中的key是文件的cache_id加上这个block在文件中的起始位置block_offset。而value则是这个Block的内容。</p>
 <p>　　如果levelDb发现这个block在block cache中，那么可以避免读取数据，直接在cache里的block内容里面查找key的value就行，如果没找到呢？那么读入block内容并把它插入block cache中。levelDb就是这样通过两个cache来加快读取速度的。从这里可以看出，如果读取的数据局部性比较好，也就是说要读的数据大部分在cache里面都能读到，那么读取效率应该还是很高的，而如果是对key进行顺序读取效率也应该不错，因为一次读入后可以多次被复用。但是如果是随机读取，您可以推断下其效率如何。</p>
-<p>##LevelDb剖析之十 Version、VersionEdit、VersionSet</p>
-<p>　　Version 保存了当前磁盘以及内存中所有的文件信息，一般只有一个Version叫做”current” version（当前版本）。Leveldb还保存了一系列的历史版本，这些历史版本有什么作用呢？</p>
+<h2 id="LevelDb剖析之十-Version、VersionEdit、VersionSet"><a href="#LevelDb剖析之十-Version、VersionEdit、VersionSet" class="headerlink" title="LevelDb剖析之十 Version、VersionEdit、VersionSet"></a>LevelDb剖析之十 Version、VersionEdit、VersionSet</h2><p>　　Version 保存了当前磁盘以及内存中所有的文件信息，一般只有一个Version叫做”current” version（当前版本）。Leveldb还保存了一系列的历史版本，这些历史版本有什么作用呢？</p>
 <p>当一个Iterator创建后，Iterator就引用到了current version(当前版本)，只要这个Iterator不被delete那么被Iterator引用的版本就会一直存活。这就意味着当你用完一个Iterator后，需要及时删除它。</p>
 <p>　　当一次Compaction结束后（会生成新的文件，合并前的文件需要删除），Leveldb会创建一个新的版本作为当前版本，原先的当前版本就会变为历史版本。</p>
 <p>　　VersionSet 是所有Version的集合，管理着所有存活的Version。</p>
@@ -690,7 +679,7 @@
               
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LevelDb剖析之一：介绍"><span class="nav-number">1.</span> <span class="nav-text">LevelDb剖析之一：介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LevelDb剖析之二：整体架构"><span class="nav-number">2.</span> <span class="nav-text">LevelDb剖析之二：整体架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LevelDb剖析之三：log文件"><span class="nav-number">3.</span> <span class="nav-text">LevelDb剖析之三：log文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LevelDb剖析之四：SSTable文件"><span class="nav-number">4.</span> <span class="nav-text">LevelDb剖析之四：SSTable文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LevelDb剖析之五：MemTable详解"><span class="nav-number">5.</span> <span class="nav-text">LevelDb剖析之五：MemTable详解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LevelDb剖析之六-写入与删除记录"><span class="nav-number">6.</span> <span class="nav-text">LevelDb剖析之六 写入与删除记录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LevelDb剖析之七：读取记录"><span class="nav-number">7.</span> <span class="nav-text">LevelDb剖析之七：读取记录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LevelDb剖析之八：Compaction操作"><span class="nav-number">8.</span> <span class="nav-text">LevelDb剖析之八：Compaction操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LevelDb剖析之九-levelDb中的Cache"><span class="nav-number">9.</span> <span class="nav-text">LevelDb剖析之九 levelDb中的Cache</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LevelDb剖析之十-Version、VersionEdit、VersionSet"><span class="nav-number">10.</span> <span class="nav-text">LevelDb剖析之十 Version、VersionEdit、VersionSet</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
