@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.ezlippi.com//blog/2016/02/jekyll-to-hexo.html</loc>
+    
+    <lastmod>2016-03-18T11:19:01.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.ezlippi.com//blog/2015/04/android-tips.html</loc>
     
     <lastmod>2016-03-18T11:03:23.000Z</lastmod>
@@ -117,13 +124,6 @@
     <loc>http://www.ezlippi.com//blog/2014/11/android-push.html</loc>
     
     <lastmod>2016-03-01T05:16:43.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.ezlippi.com//blog/2016/02/jekyll-to-hexo.html</loc>
-    
-    <lastmod>2016-03-01T03:25:31.000Z</lastmod>
     
   </url>
   
