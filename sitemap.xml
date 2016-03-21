@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.ezlippi.com//blog/2015/03/github-pages-blog.html</loc>
+    
+    <lastmod>2016-03-21T10:06:21.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.ezlippi.com//blog/2016/03/android-apk-classy.html</loc>
     
     <lastmod>2016-03-20T11:44:57.000Z</lastmod>
@@ -152,13 +159,6 @@
     <loc>http://www.ezlippi.com//blog/2016/01/apache-configuration-in-ubuntu.html</loc>
     
     <lastmod>2016-02-29T13:53:50.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.ezlippi.com//blog/2015/03/github-pages-blog.html</loc>
-    
-    <lastmod>2016-02-29T13:49:27.000Z</lastmod>
     
   </url>
   
