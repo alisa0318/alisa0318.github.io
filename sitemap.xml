@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.ezlippi.com//blog/2015/03/android-studio-prefrence.html</loc>
+    
+    <lastmod>2016-03-21T12:03:57.000Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://www.ezlippi.com//blog/2014/11/java-concurrent-collections.html</loc>
+    
+    <lastmod>2016-03-21T11:58:24.000Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.ezlippi.com//blog/2015/03/github-pages-blog.html</loc>
     
-    <lastmod>2016-03-21T10:06:21.000Z</lastmod>
+    <lastmod>2016-03-21T11:53:41.000Z</lastmod>
     
   </url>
   
@@ -163,13 +177,6 @@
   </url>
   
   <url>
-    <loc>http://www.ezlippi.com//blog/2015/03/android-studio-prefrence.html</loc>
-    
-    <lastmod>2016-02-29T13:39:04.000Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://www.ezlippi.com//blog/2014/11/java-inner-class.html</loc>
     
     <lastmod>2016-02-29T13:22:15.000Z</lastmod>
@@ -271,13 +278,6 @@
     <loc>http://www.ezlippi.com//blog/2014/11/web-server.html</loc>
     
     <lastmod>2016-02-29T12:36:33.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.ezlippi.com//blog/2014/11/java-concurrent-collections.html</loc>
-    
-    <lastmod>2016-02-29T12:36:13.000Z</lastmod>
     
   </url>
   

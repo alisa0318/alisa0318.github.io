@@ -65,7 +65,7 @@
 <meta property="og:url" content="http://www.ezlippi.com/blog/2015/03/android-studio-prefrence.html">
 <meta property="og:site_name" content="Lippi-浮生志">
 <meta property="og:description" content="Gradle是一种依赖管理工具，基于Groovy语言，面向Java应用为主，它抛弃了基于XML的各种繁琐配置，取而代之的是一种基于Groovy的内部领域特定（DSL）语言。">
-<meta property="og:updated_time" content="2016-02-29T13:39:04.000Z">
+<meta property="og:updated_time" content="2016-03-21T12:03:57.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android Studio多渠道打包和代码混淆教程">
 <meta name="twitter:description" content="Gradle是一种依赖管理工具，基于Groovy语言，面向Java应用为主，它抛弃了基于XML的各种繁琐配置，取而代之的是一种基于Groovy的内部领域特定（DSL）语言。">
@@ -338,7 +338,7 @@
       
 
       
-        <h3 id="什么是Gradle"><a href="#什么是Gradle" class="headerlink" title="什么是Gradle"></a>什么是Gradle</h3><p>Gradle是一种依赖管理工具，基于Groovy语言，面向Java应用为主，它抛弃了基于XML的各种繁琐配置，取而代之的是一种基于Groovy的领域特定（DSL）语言。Android Studio中新建项目成功后自动下载Gradle。<br>Gradle有几个基本组件：<br><a id="more"></a><br>1.整个项目的gradle配置文件build.gradle</p>
+        <h2 id="什么是Gradle"><a href="#什么是Gradle" class="headerlink" title="什么是Gradle"></a>什么是Gradle</h2><p>Gradle是一种依赖管理工具，基于Groovy语言，面向Java应用为主，它抛弃了基于XML的各种繁琐配置，取而代之的是一种基于Groovy的领域特定（DSL）语言。Android Studio中新建项目成功后自动下载Gradle。<br>Gradle有几个基本组件：<br><a id="more"></a><br>1.整个项目的gradle配置文件build.gradle</p>
 <figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Top-level build file where you can add configuration options common to all sub-projects/modules.</span></span><br><span class="line"></span><br><span class="line">buildscript &#123;</span><br><span class="line"> repositories &#123;</span><br><span class="line">        mavenCentral()</span><br><span class="line">    &#125;</span><br><span class="line">    dependencies &#123;</span><br><span class="line">        classpath <span class="string">'com.android.tools.build:gradle:1.1.0'</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// <span class="doctag">NOTE:</span> Do not place your application dependencies here; they belong</span></span><br><span class="line">    <span class="comment">// in the individual module build.gradle files</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">allprojects &#123;</span><br><span class="line">    repositories &#123;</span><br><span class="line">        mavenCentral()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>内容主要包含了两个方面：一个是声明仓库的源，我这里用的是mavenCentral(), jcenter可以理解成是一个新的中央远程仓库，兼容maven中心仓库，而且性能更优。另一个是声明了android gradle plugin的版本，android studio 1.1正式版必须要求支持gradle plugin 1.1的版本。</p>
 <hr>
@@ -361,7 +361,7 @@
 <p>compile project(‘:extras:ShimmerAndroid’)这一行是因为项目中存在其他Module，你可以理解成Android Library，由于Gradle的普及以及远程仓库的完善，这种依赖渐渐的会变得非常不常见，但是你需要知道有这种依赖的。</p>
 <hr>
 <p>3.gradle目录下有个 wrapper 文件夹，里面可以看到有两个文件，我们主要看下 gradle-wrapper.properties 这个文件的内容：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line">#Fri Dec 19 21:59:01 CST 2014</span><br><span class="line">distributionBase=GRADLE_USER_HOME</span><br><span class="line">distributionPath=wrapper/dists</span><br><span class="line">zipStoreBase=GRADLE_USER_HOME</span><br><span class="line">zipStorePath=wrapper/dists</span><br><span class="line">distributionUrl=https\://services.gradle.org/distributions/gradle-2.2.1-all.zip</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#Fri Dec 19 21:59:01 CST 2014</span><br><span class="line">distributionBase=GRADLE_USER_HOME</span><br><span class="line">distributionPath=wrapper/dists</span><br><span class="line">zipStoreBase=GRADLE_USER_HOME</span><br><span class="line">zipStorePath=wrapper/dists</span><br><span class="line">distributionUrl=https\://services.gradle.org/distributions/gradle-2.2.1-all.zip</span><br></pre></td></tr></table></figure>
 <p>可以看到里面声明了gradle的目录与下载路径以及当前项目使用的gradle版本，这些默认的路径我们一般不会更改的，这个文件里指明的gradle版本不对也是很多导包不成功的原因之一</p>
 <hr>
 <p>4.settings.gradle</p>
@@ -780,7 +780,7 @@
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是Gradle"><span class="nav-number">1.</span> <span class="nav-text">什么是Gradle</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradle多渠道打包"><span class="nav-number"></span> <span class="nav-text">Gradle多渠道打包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码混淆"><span class="nav-number"></span> <span class="nav-text">代码混淆</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Gradle"><span class="nav-number">1.</span> <span class="nav-text">什么是Gradle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradle多渠道打包"><span class="nav-number">2.</span> <span class="nav-text">Gradle多渠道打包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码混淆"><span class="nav-number">3.</span> <span class="nav-text">代码混淆</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">

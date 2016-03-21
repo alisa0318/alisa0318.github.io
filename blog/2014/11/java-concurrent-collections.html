@@ -65,7 +65,7 @@
 <meta property="og:url" content="http://www.ezlippi.com/blog/2014/11/java-concurrent-collections.html">
 <meta property="og:site_name" content="Lippi-浮生志">
 <meta property="og:description" content="在编程的时候经常会用到容器，当容器被多线程读取的时候我们就要考虑线程安全的问题，哪些容器是线程是线程安全的，容器的哪些操作又是线程安全的，这些安全机制是怎么实现的，本文将一一介绍。">
-<meta property="og:updated_time" content="2016-02-29T12:36:13.000Z">
+<meta property="og:updated_time" content="2016-03-21T11:58:24.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java同步容器与并发容器">
 <meta name="twitter:description" content="在编程的时候经常会用到容器，当容器被多线程读取的时候我们就要考虑线程安全的问题，哪些容器是线程是线程安全的，容器的哪些操作又是线程安全的，这些安全机制是怎么实现的，本文将一一介绍。">
@@ -338,14 +338,12 @@
       
 
       
-        <p>在编程的时候经常会用到容器，当容器被多线程读取的时候我们就要考虑线程安全的问题，哪些容器是线程是线程安全的，容器的哪些操作又是线程安全的，这些安全机制是怎么实现的，本文将一一介绍。</p>
-<h2 id=""><a href="#" class="headerlink" title=""></a><a id="more"></a></h2><h1 id="同步容器"><a href="#同步容器" class="headerlink" title="同步容器"></a>同步容器</h1><p><strong>1. vector和hashtable</strong></p>
-<p>jdk很早的时候就支持vector和hashtable，vector内部是一个数组，它的同步是在所有对元素的存取操作上进行synchronized的，也就是说每个时刻只能由一个线程可以访问容器的元素，这种线程安全是比较粗粒度的。<br>比如你在进行vector容器的迭代操作(iterator.next())时再调用vector.put(object o)时会抛出ConcurrentModificationException</p>
+        <p>在编程的时候经常会用到容器，当容器被多线程读取的时候我们就要考虑线程安全的问题，哪些容器是线程是线程安全的，容器的哪些操作又是线程安全的，这些安全机制是怎么实现的，本文将一一介绍。<br><a id="more"></a></p>
+<h2 id="同步容器"><a href="#同步容器" class="headerlink" title="同步容器"></a>同步容器</h2><h3 id="1-vector和hashtable"><a href="#1-vector和hashtable" class="headerlink" title="1. vector和hashtable"></a>1. vector和hashtable</h3><p>jdk很早的时候就支持vector和hashtable，vector内部是一个数组，它的同步是在所有对元素的存取操作上进行synchronized的，也就是说每个时刻只能由一个线程可以访问容器的元素，这种线程安全是比较粗粒度的。<br>比如你在进行vector容器的迭代操作(iterator.next())时再调用vector.put(object o)时会抛出ConcurrentModificationException</p>
 <hr>
 <p>hashtable的内部实现：<br>  首先回顾下hashmap的实现，我们初始化一个hashmap时有两个参数inital capacity用来定义hashmap的初始化buckets数，reload factor加载因子，初始值为0.75，当hashmap中entry的数量超过这个比值时hashmap就会进行扩容，然后所有的entry进行rehash，这两个初始参数都必须选择合适的值，如果inital capacity选择太小，由于容器是开链的，会给查找元素增加额外的负担，reload factor不能选的过大，否则插入元素时出现碰撞的几率会增大。<br>hashtable就是在hashmap的基础上对所有元素的访问和插入操作用synchronized关键字同步，同样，在对容器元素迭代访问时进行插入操作会抛出ConcurrentModificationException。</p>
 <hr>
-<p><strong>2. collections.synchronizedXXX工厂方法创建</strong></p>
-<p>  collections.synchronizedXXX是在jdk2引入的，和vector,hashtable一样，都是在整个容器上进行同步操作。<br>举个例子，下面这个是jdk7种collections.synchronizedMap的实现，这里只列出部分代码：</p>
+<h3 id="2-collections-synchronizedXXX工厂方法创建"><a href="#2-collections-synchronizedXXX工厂方法创建" class="headerlink" title="2. collections.synchronizedXXX工厂方法创建"></a>2. collections.synchronizedXXX工厂方法创建</h3><p>  collections.synchronizedXXX是在jdk2引入的，和vector,hashtable一样，都是在整个容器上进行同步操作。<br>举个例子，下面这个是jdk7种collections.synchronizedMap的实现，这里只列出部分代码：</p>
 <pre><code>private static class SynchronizedMap&lt;K,V&gt;
     implements Map&lt;K,V&gt;, Serializable {
     private static final long serialVersionUID = 1978198479659022715L;
@@ -391,8 +389,7 @@
     public void clear() {
         synchronized (mutex) {m.clear();}
     }
-</code></pre><hr>
-<h1 id="并发容器"><a href="#并发容器" class="headerlink" title="并发容器"></a>并发容器</h1><p>JDK5中添加了新的concurrent包，其中包含了很多并发容器，这些容器针对多线程环境进行了优化，大大提高了容器类在并发环境下的执行效率。<br>下面所有的代码都是来源于jdk7。</p>
+</code></pre><h2 id="并发容器"><a href="#并发容器" class="headerlink" title="并发容器"></a>并发容器</h2><p>JDK5中添加了新的concurrent包，其中包含了很多并发容器，这些容器针对多线程环境进行了优化，大大提高了容器类在并发环境下的执行效率。<br>下面所有的代码都是来源于jdk7。</p>
 <h2 id="CopyOnWriteArrayList"><a href="#CopyOnWriteArrayList" class="headerlink" title="CopyOnWriteArrayList"></a>CopyOnWriteArrayList</h2><p>CopyOnWriteArrayList类是一个线程安全的List接口的实现，在该类的内部进行元素的<strong>写操作时，底层的数组将被完整的复制</strong>，这对于读操作远远多于写操作的应用非常适合。在CopyOnWriteArrayList上进行操作时，<strong>读操作不需要加锁，而写操作类实现中对其进行了加锁</strong>。</p>
 <p>底层实现如下：</p>
 <pre><code>public class CopyOnWriteArrayList&lt;E&gt;  
@@ -1274,7 +1271,7 @@ for (;;) {
               
             
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-number">1.</span> <span class="nav-text"></span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#同步容器"><span class="nav-number"></span> <span class="nav-text">同步容器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#并发容器"><span class="nav-number"></span> <span class="nav-text">并发容器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CopyOnWriteArrayList"><span class="nav-number">1.</span> <span class="nav-text">CopyOnWriteArrayList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BlockingQueue"><span class="nav-number">2.</span> <span class="nav-text">BlockingQueue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LinkedBlockingQueue"><span class="nav-number">3.</span> <span class="nav-text">LinkedBlockingQueue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentHashMap"><span class="nav-number">4.</span> <span class="nav-text">ConcurrentHashMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentLinkedQueue"><span class="nav-number">5.</span> <span class="nav-text">ConcurrentLinkedQueue</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#同步容器"><span class="nav-number">1.</span> <span class="nav-text">同步容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-vector和hashtable"><span class="nav-number">1.1.</span> <span class="nav-text">1. vector和hashtable</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-collections-synchronizedXXX工厂方法创建"><span class="nav-number">1.2.</span> <span class="nav-text">2. collections.synchronizedXXX工厂方法创建</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#并发容器"><span class="nav-number">2.</span> <span class="nav-text">并发容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CopyOnWriteArrayList"><span class="nav-number">3.</span> <span class="nav-text">CopyOnWriteArrayList</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BlockingQueue"><span class="nav-number">4.</span> <span class="nav-text">BlockingQueue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LinkedBlockingQueue"><span class="nav-number">5.</span> <span class="nav-text">LinkedBlockingQueue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentHashMap"><span class="nav-number">6.</span> <span class="nav-text">ConcurrentHashMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ConcurrentLinkedQueue"><span class="nav-number">7.</span> <span class="nav-text">ConcurrentLinkedQueue</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator">
