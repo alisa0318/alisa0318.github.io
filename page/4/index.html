@@ -1066,8 +1066,8 @@
             
               
                 
-                <a class="post-title-link" href="/blog/2014/11/android-push.html" itemprop="url">
-                  Android消息推送方式
+                <a class="post-title-link" href="/blog/2014/11/java-nio.html" itemprop="url">
+                  java中NIO与传统IO
                 </a>
               
             
@@ -1094,8 +1094,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/web/" itemprop="url" rel="index">
-                    <span itemprop="name">web</span>
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
                   </a>
                 </span>
 
@@ -1110,8 +1110,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/blog/2014/11/android-push.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2014/11/android-push.html" itemprop="commentsCount"></span>
+                <a href="/blog/2014/11/java-nio.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2014/11/java-nio.html" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1134,9 +1134,10 @@
 
       
         
-          <p>当我们开发需要和服务器交互的应用程序时，基本上都需要获取服务器端的数据，比如《地震及时通》就需要及时获取服务器上最新的地震信息。要获取服务器上不定时更新的信息一般来说有两种方法，第一种是客户端使用<strong>Pull（拉）</strong>的方式，隔一段时间就去服务器上获取信息，看是否有更新的信息出现。第二种就是服务器使用<strong>Push（推送）</strong>的方式，当服务器端有新信息了，则把最新的信息Push到客户端上。<br>虽然Pull和Push两种方式都能实现获取服务器端更新信息的功能，但是明显来说<strong>Push is better than pull</strong>。<br><strong>因为Pull方式更费客户端的网络流量，更主要的是费电量。</strong><br>
+          <p><strong>感性认识：</strong></p>
+<p><strong>传统的</strong>socket IO中，<strong>需要为每个连接创建一个线程</strong>，当并发的连接数量非常巨大时，<strong>线程所占用的栈内存和CPU线程切换的开销</strong>将非常巨大。使用<strong>NIO</strong>，不再需要为每个线程创建单独的线程，可以用一个<strong>含有限数量线程的线程池</strong>，甚至一个线程来为任意数量的连接服务。由于线程数量小于连接数量，所以每个线程进行IO操作时就不能阻塞，如果阻塞的话，有些连接就得不到处理，NIO提供了这种非阻塞的能力。</p>
           <div class="post-more-link text-center">
-            <a class="btn" href="/blog/2014/11/android-push.html#more" rel="contents">
+            <a class="btn" href="/blog/2014/11/java-nio.html#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1293,8 +1294,8 @@
             
               
                 
-                <a class="post-title-link" href="/blog/2014/11/java-nio.html" itemprop="url">
-                  java中NIO与传统IO
+                <a class="post-title-link" href="/blog/2014/11/android-push.html" itemprop="url">
+                  Android消息推送方式
                 </a>
               
             
@@ -1321,8 +1322,8 @@
               <span class="post-meta-item-text">分类于</span>
               
                 <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index">
-                    <span itemprop="name">java</span>
+                  <a href="/categories/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
                   </a>
                 </span>
 
@@ -1337,8 +1338,8 @@
             
               <span class="post-comments-count">
                 &nbsp; | &nbsp;
-                <a href="/blog/2014/11/java-nio.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2014/11/java-nio.html" itemprop="commentsCount"></span>
+                <a href="/blog/2014/11/android-push.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2014/11/android-push.html" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -1361,10 +1362,9 @@
 
       
         
-          <p><strong>感性认识：</strong></p>
-<p><strong>传统的</strong>socket IO中，<strong>需要为每个连接创建一个线程</strong>，当并发的连接数量非常巨大时，<strong>线程所占用的栈内存和CPU线程切换的开销</strong>将非常巨大。使用<strong>NIO</strong>，不再需要为每个线程创建单独的线程，可以用一个<strong>含有限数量线程的线程池</strong>，甚至一个线程来为任意数量的连接服务。由于线程数量小于连接数量，所以每个线程进行IO操作时就不能阻塞，如果阻塞的话，有些连接就得不到处理，NIO提供了这种非阻塞的能力。</p>
+          <p>当我们开发需要和服务器交互的应用程序时，基本上都需要获取服务器端的数据，比如《地震及时通》就需要及时获取服务器上最新的地震信息。要获取服务器上不定时更新的信息一般来说有两种方法，第一种是客户端使用<strong>Pull（拉）</strong>的方式，隔一段时间就去服务器上获取信息，看是否有更新的信息出现。第二种就是服务器使用<strong>Push（推送）</strong>的方式，当服务器端有新信息了，则把最新的信息Push到客户端上。<br>虽然Pull和Push两种方式都能实现获取服务器端更新信息的功能，但是明显来说<strong>Push is better than pull</strong>。<br><strong>因为Pull方式更费客户端的网络流量，更主要的是费电量。</strong><br>
           <div class="post-more-link text-center">
-            <a class="btn" href="/blog/2014/11/java-nio.html#more" rel="contents">
+            <a class="btn" href="/blog/2014/11/android-push.html#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
