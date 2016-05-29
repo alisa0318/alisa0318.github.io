@@ -47,8 +47,6 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Lippi-浮生志" type="application/atom+xml" />
-
 
 
 
@@ -70,6 +68,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Volley源码分析">
 <meta name="twitter:description" content="说到Android的网络库，比较常用的就是Volley和okHttp了，最近重温了下Volley的源码，感觉应该写点什么．Volley 是 Google 推出的 Android 异步网络请求框架和图片加载框架，适合数据量小通信比较频繁的情形．">
+<meta name="twitter:image" content="http://www.ezlippi.com/images/volley.png">
 
 
 
@@ -331,15 +330,10 @@
 
           
           
-	
-	<span id="busuanzi_container_page_pv" class="post-meta-item-text">
-		&nbsp; | &nbsp;  
-	    <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Hits
-	</span>
         </div>
       </header>
     
-	
+
 
 
     <div class="post-body" itemprop="articleBody">
@@ -356,7 +350,7 @@
 <p>上面讲到请求是保存在优先队列中，那么请求按照什么排序呢？自然是优先级了，<br>如果优先级一样就按照序列号排序，先进先出．请求一共有四个优先级，如下所示：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Priority &#123;</span><br><span class="line">        LOW,</span><br><span class="line">	NORMAL,</span><br><span class="line">	HIGH,</span><br><span class="line">	IMMEDIATE</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>既然是这样那么请求一定实现了java的<code>Comparable</code>接口了，没错，而且正如前面所说请求按照优先级和序列号来排序，如下所示：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Request&lt;T&gt; other)</span> </span>&#123;</span><br><span class="line">Priority left = <span class="keyword">this</span>.getPriority();</span><br><span class="line">Priority right = other.getPriority();</span><br><span class="line"></span><br><span class="line"><span class="comment">// High-priority requests are "lesser" so they are sorted to the front.</span></span><br><span class="line"><span class="comment">// Equal priorities are sorted by sequence number to provide FIFO ordering.</span></span><br><span class="line"><span class="keyword">return</span> left == right ?</span><br><span class="line">        <span class="keyword">this</span>.mSequence - other.mSequence :</span><br><span class="line">        right.ordinal() - left.ordinal();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Request&lt;T&gt; other)</span> </span>&#123;</span><br><span class="line">Priority left = <span class="keyword">this</span>.getPriority();</span><br><span class="line">Priority right = other.getPriority();</span><br><span class="line"></span><br><span class="line"><span class="comment">// High-priority requests are "lesser" so they are sorted to the front.</span></span><br><span class="line"><span class="comment">// Equal priorities are sorted by sequence number to provide FIFO ordering.</span></span><br><span class="line"><span class="keyword">return</span> left == right ?</span><br><span class="line">        <span class="keyword">this</span>.mSequence - other.mSequence :</span><br><span class="line">        right.ordinal() - left.ordinal();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="请求分派RequestDispatcher"><a href="#请求分派RequestDispatcher" class="headerlink" title="请求分派RequestDispatcher"></a>请求分派RequestDispatcher</h2><p>Volley里面有两个<code>Dispacher</code>,一个是<code>CacheDispatcher</code>,另一个是<code>NetworkDispatcher</code>,两个都是继承自线程，<code>CacheDispatcher</code>启动后从mCacheQueue里取出请求，根据请求的CacheKey(实际上是url)从缓存中检索数据，如果没有检索到数据就把它重新丢进<code>mNetworkQueue</code>中从网络中获取数据，如果缓存命中同时检查下缓存是否过期，如果缓存过期了照样要重新获取数据，否则调用<code>ResponseDelivery</code>把响应传递给相应的对象(实际上是调用请求注册的相应监听器)．<br>Volley默认启动了４个<code>NetworkDispatcher</code>线程来处理网络请求，为了避免过多的网络请求造成UI卡死，Volley默认把这些线程的优先级设置为后台线程<code>Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);</code></p>
 <h2 id="HttpStack"><a href="#HttpStack" class="headerlink" title="HttpStack"></a>HttpStack</h2><p>Volley的<code>NetworkDispatcher</code>线程默认调用的是Network类的<code>HttpStack</code>的方法来执行Http请求，HttpStack的实现有两种，如果系统在 Gingerbread 及之后(即 API Level &gt;= 9)，采用基于 <code>HttpURLConnection</code> 的 HurlStack，如果小于 9，采用基于 HttpClient 的 <code>HttpClientStack</code>。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (stack == <span class="keyword">null</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (Build.VERSION.SDK_INT &gt;= <span class="number">9</span>) &#123;</span><br><span class="line">	stack = <span class="keyword">new</span> HurlStack();</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	stack = <span class="keyword">new</span> HttpClientStack(AndroidHttpClient.newInstance(userAgent));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -367,7 +361,7 @@
 </code></pre><p>经常用 WebView 的同学会也许会发现似曾相识，是的，WebView 默认的 User-Agent 也是这个。实际在请求发出之前，会检测 User-Agent 是否为空，如果不为空，则加上系统默认 User-Agent。在 Android 2.1 之后，我们可以通过</p>
 <pre><code>String userAgent = System.getProperty(&quot;http.agent&quot;);
 </code></pre><p>得到系统默认的 User-Agent，Volley 如果希望自定义 User-Agent，可在自定义 Request 中重写 getHeaders() 函数</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="annotation">@Override</span></span><br><span class="line"><span class="keyword">public</span> Map&lt;String, String&gt; getHeaders() <span class="keyword">throws</span> AuthFailureError &#123;</span><br><span class="line">    <span class="comment">// self-defined user agent</span></span><br><span class="line">    Map&lt;String, String&gt; headerMap = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">    headerMap.put(<span class="string">"User-Agent"</span>, <span class="string">"android-open-project-analysis/1.0"</span>);</span><br><span class="line">    <span class="keyword">return</span> headerMap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Map&lt;String, String&gt; <span class="title">getHeaders</span><span class="params">()</span> <span class="keyword">throws</span> AuthFailureError </span>&#123;</span><br><span class="line">    <span class="comment">// self-defined user agent</span></span><br><span class="line">    Map&lt;String, String&gt; headerMap = <span class="keyword">new</span> HashMap&lt;String, String&gt;();</span><br><span class="line">    headerMap.put(<span class="string">"User-Agent"</span>, <span class="string">"android-open-project-analysis/1.0"</span>);</span><br><span class="line">    <span class="keyword">return</span> headerMap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h2 id="DiskBasedCache"><a href="#DiskBasedCache" class="headerlink" title="DiskBasedCache"></a>DiskBasedCache</h2><p>Volley默认是把缓存保存在文件中，并在内存中保存了缓存的头部，缓存头部占的最大内存可以设置，便于快速查询缓存是否存在．CacheHeader的主要属性有<br>文件大小size,缓存的etag,获取缓存的key,ttl,softTtl以及responseHeader.根据key来查询缓存，先从内存中查询是否存在CacheHeader,如果存在再从文件中把响应的data再读出来．每次向缓存中插入数据时先看看是否达到了缓存的最大大小，如果超过了容量就按照LRU算法从缓存中删除一部分数据直到满足需求，LRU算法实现很简单，直接调用LinkedHashMap来实现，<code>private final Map&lt;String, CacheHeader&gt; mEntries = new LinkedHashMap&lt;String, CacheHeader&gt;(16,0.75f,true)</code>.</p>
 <h2 id="ByteArrayPool"><a href="#ByteArrayPool" class="headerlink" title="ByteArrayPool"></a>ByteArrayPool</h2><p>ByteArrayPool很有意思，这是一个字节数组池，Volley进行网络操作的时候会把HTTP响应的内容写入到字节数组中，如果频繁的申请大的字节数组可能会对系统性能有所影响，所以Volley采取了对象池的方法来解决频繁申请内存的问题，它的实现也比较简单，用的两个字节数组链表，一个按照使用的先后排序，另一个按照字节数组的大小排序，如下所示：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> List&lt;<span class="keyword">byte</span>[]&gt; mBuffersByLastUse = <span class="keyword">new</span> LinkedList&lt;<span class="keyword">byte</span>[]&gt;();</span><br><span class="line"><span class="keyword">private</span> List&lt;<span class="keyword">byte</span>[]&gt; mBuffersBySize = <span class="keyword">new</span> ArrayList&lt;<span class="keyword">byte</span>[]&gt;(<span class="number">64</span>);</span><br></pre></td></tr></table></figure>
@@ -422,7 +416,7 @@
         <div class="ds-share flat" data-thread-key="/blog/2015/08/volley-source-code.html"
      data-title="Volley源码分析"
      data-content=""
-     data-url="http://www.ezlippi.com//blog/2015/08/volley-source-code.html">
+     data-url="http://www.ezlippi.com/blog/2015/08/volley-source-code.html">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -453,7 +447,7 @@
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="/blog/2015/08/volley-source-code.html"
-           data-title="Volley源码分析" data-url="http://www.ezlippi.com//blog/2015/08/volley-source-code.html">
+           data-title="Volley源码分析" data-url="http://www.ezlippi.com/blog/2015/08/volley-source-code.html">
       </div>
     
   </div>
@@ -523,13 +517,6 @@
 
         </nav>
 
-        
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="fa fa-rss"></i>
-              RSS
-            </a>
-          </div>
         
 
         <div class="links-of-author motion-element">

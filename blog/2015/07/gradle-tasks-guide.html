@@ -47,8 +47,6 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Lippi-浮生志" type="application/atom+xml" />
-
 
 
 
@@ -70,6 +68,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="彻底理解Gradle的任务">
 <meta name="twitter:description" content="在Gradle的build文件中，任务是构建活动最基本的单元，它是许多构建指令的集合，下面我将仔细介绍Gradle任务的细节。">
+<meta name="twitter:image" content="http://www.ezlippi.com/images/gradle-tasks.png">
 
 
 
@@ -319,15 +318,10 @@
 
           
           
-	
-	<span id="busuanzi_container_page_pv" class="post-meta-item-text">
-		&nbsp; | &nbsp;  
-	    <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Hits
-	</span>
         </div>
       </header>
     
-	
+
 
 
     <div class="post-body" itemprop="articleBody">
@@ -442,7 +436,7 @@ $
 <h3 id="在源码树中定义自定义任务类型"><a href="#在源码树中定义自定义任务类型" class="headerlink" title="在源码树中定义自定义任务类型"></a>在源码树中定义自定义任务类型</h3><p>前面你在build文件中定义了一个自定义的MySqlTask类型，这样的缺点就是你无法在其他构建文件中使用它，只能把它的源码复制过去。我们可以在源码树的buildSrc目录下定义自定义任务类型，这个目录下的文件会被自动编译然后添加到项目的classpath中，如下所示：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">//任务MySqlTask并没有定义在构建脚本中</span><br><span class="line">task createDatabase(type: MySqlTask) &#123;</span><br><span class="line">    sql = 'CREATE DATABASE IF NOT EXISTS example'</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task createUser(type: MySqlTask, dependsOn: createDatabase) &#123;</span><br><span class="line">    sql = "GRANT ALL PRIVILEGES ON example.*</span><br><span class="line">    TO exampleuser@localhost IDENTIFIED BY 'passw0rd'"</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task createTable(type: MySqlTask, dependsOn: createUser) &#123;</span><br><span class="line">    username = 'exampleuser'</span><br><span class="line">    password = 'passw0rd'</span><br><span class="line">    database = 'example'</span><br><span class="line">    sql = 'CREATE TABLE IF NOT EXISTS users</span><br><span class="line">    (id BIGINT PRIMARY KEY, username VARCHAR(100))'</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在buildSrc目录下新建一个文件MysqlTask.groovy,然后添加下面的代码：</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.gradle.api.DefaultTask</span><br><span class="line"><span class="keyword">import</span> org.gradle.api.tasks.TaskAction</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MySqlTask</span> <span class="keyword">extends</span> <span class="title">DefaultTask</span> &#123;</span></span><br><span class="line">    <span class="comment">//声明任务的属性</span></span><br><span class="line">    <span class="keyword">def</span> hostname = <span class="string">'localhost'</span></span><br><span class="line">    <span class="keyword">def</span> port = <span class="number">3306</span></span><br><span class="line">    <span class="keyword">def</span> sql</span><br><span class="line">    <span class="keyword">def</span> database</span><br><span class="line">    <span class="keyword">def</span> username = <span class="string">'root'</span></span><br><span class="line">    <span class="keyword">def</span> password = <span class="string">'password'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//表示这是任务的动作</span></span><br><span class="line"><span class="annotation">@TaskAction</span></span><br><span class="line"><span class="keyword">def</span> runQuery() &#123;</span><br><span class="line">	<span class="keyword">def</span> cmd</span><br><span class="line"><span class="keyword">if</span>(database) &#123;</span><br><span class="line">	cmd = <span class="string">"mysql -u $&#123;username&#125; -p$&#123;password&#125; -h 	$&#123;hostname&#125;-P $&#123;port&#125; $&#123;database&#125; -e "</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">	cmd = <span class="string">"mysql -u $&#123;username&#125; -p$&#123;password&#125; -h $&#123;hostname&#125; -P $&#123;port&#125; -e "</span></span><br><span class="line">&#125;</span><br><span class="line">project.exec &#123;</span><br><span class="line">	commandLine = cmd.split().toList() + sql</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.gradle.api.DefaultTask</span><br><span class="line"><span class="keyword">import</span> org.gradle.api.tasks.TaskAction</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MySqlTask</span> <span class="keyword">extends</span> <span class="title">DefaultTask</span> &#123;</span></span><br><span class="line">    <span class="comment">//声明任务的属性</span></span><br><span class="line">    <span class="keyword">def</span> hostname = <span class="string">'localhost'</span></span><br><span class="line">    <span class="keyword">def</span> port = <span class="number">3306</span></span><br><span class="line">    <span class="keyword">def</span> sql</span><br><span class="line">    <span class="keyword">def</span> database</span><br><span class="line">    <span class="keyword">def</span> username = <span class="string">'root'</span></span><br><span class="line">    <span class="keyword">def</span> password = <span class="string">'password'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//表示这是任务的动作</span></span><br><span class="line"><span class="meta">@TaskAction</span></span><br><span class="line"><span class="keyword">def</span> runQuery() &#123;</span><br><span class="line">	<span class="keyword">def</span> cmd</span><br><span class="line"><span class="keyword">if</span>(database) &#123;</span><br><span class="line">	cmd = <span class="string">"mysql -u $&#123;username&#125; -p$&#123;password&#125; -h 	$&#123;hostname&#125;-P $&#123;port&#125; $&#123;database&#125; -e "</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">	cmd = <span class="string">"mysql -u $&#123;username&#125; -p$&#123;password&#125; -h $&#123;hostname&#125; -P $&#123;port&#125; -e "</span></span><br><span class="line">&#125;</span><br><span class="line">project.exec &#123;</span><br><span class="line">	commandLine = cmd.split().toList() + sql</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>编译之后buildSrc目录树如下所示：</p>
 <p><img src="/images/gradle-tasks.png" alt="/images/gradle-tasks.png"></p>
 <p>对Gradle的任务介绍就到此为止，大家如果还有不懂的地方可以去查看Gradle的官方文档<a href="https://docs.gradle.org/current/release-notes" target="_blank" rel="external">https://docs.gradle.org/current/release-notes</a>。</p>
@@ -491,7 +485,7 @@ $
         <div class="ds-share flat" data-thread-key="/blog/2015/07/gradle-tasks-guide.html"
      data-title="彻底理解Gradle的任务"
      data-content=""
-     data-url="http://www.ezlippi.com//blog/2015/07/gradle-tasks-guide.html">
+     data-url="http://www.ezlippi.com/blog/2015/07/gradle-tasks-guide.html">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -522,7 +516,7 @@ $
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="/blog/2015/07/gradle-tasks-guide.html"
-           data-title="彻底理解Gradle的任务" data-url="http://www.ezlippi.com//blog/2015/07/gradle-tasks-guide.html">
+           data-title="彻底理解Gradle的任务" data-url="http://www.ezlippi.com/blog/2015/07/gradle-tasks-guide.html">
       </div>
     
   </div>
@@ -592,13 +586,6 @@ $
 
         </nav>
 
-        
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="fa fa-rss"></i>
-              RSS
-            </a>
-          </div>
         
 
         <div class="links-of-author motion-element">

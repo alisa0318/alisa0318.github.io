@@ -47,8 +47,6 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Lippi-浮生志" type="application/atom+xml" />
-
 
 
 
@@ -330,15 +328,10 @@
 
           
           
-	
-	<span id="busuanzi_container_page_pv" class="post-meta-item-text">
-		&nbsp; | &nbsp;  
-	    <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Hits
-	</span>
         </div>
       </header>
     
-	
+
 
 
     <div class="post-body" itemprop="articleBody">
@@ -357,21 +350,21 @@
 <p>在图形界面中将<code>Create symlinks in system directories</code>选项更改为<code>Yes</code>，点击 <code>Install TeX Live</code> 开始安装。</p>
 <h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p>可根据安装结束时的文本提示进行相应的环境变量配置，我在安装时进行了如下配置。</p>
 <p>在 ～/.bashrc 和 ～/.profile 文件结尾添加如下代码：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#自己为texlive配置的环境变量</span></span><br><span class="line">PATH=/usr/<span class="built_in">local</span>/texlive/<span class="number">2014</span>/bin/x86_64-linux:<span class="variable">$PATH</span>; <span class="built_in">export</span> PATH</span><br><span class="line">MANPATH=/usr/<span class="built_in">local</span>/texlive/<span class="number">2014</span>/texmf-dist/doc/man:<span class="variable">$MANPATH</span>; <span class="built_in">export</span> MANPATH</span><br><span class="line">INFOPATH=/usr/<span class="built_in">local</span>/texlive/<span class="number">2014</span>/texmf-dist/doc/info:<span class="variable">$INFOPATH</span>; <span class="built_in">export</span> INFOPATH</span><br></pre></td></tr></table></figure>
-<p>为了配置全局的环境变量，可在 /etc/manpath.config 文件的 <em># set up PATH to MANPATH mapping.</em> 下添加:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MANPATH_MAP /usr/<span class="built_in">local</span>/texlive/<span class="number">2014</span>/bin/x86_64-linux /usr/<span class="built_in">local</span>/texlive/<span class="number">2014</span>/texmf-dist/doc/man</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#自己为texlive配置的环境变量</span></span><br><span class="line">PATH=/usr/<span class="built_in">local</span>/texlive/2014/bin/x86_64-linux:<span class="variable">$PATH</span>; <span class="built_in">export</span> PATH</span><br><span class="line">MANPATH=/usr/<span class="built_in">local</span>/texlive/2014/texmf-dist/doc/man:<span class="variable">$MANPATH</span>; <span class="built_in">export</span> MANPATH</span><br><span class="line">INFOPATH=/usr/<span class="built_in">local</span>/texlive/2014/texmf-dist/doc/info:<span class="variable">$INFOPATH</span>; <span class="built_in">export</span> INFOPATH</span><br></pre></td></tr></table></figure>
+<p>为了配置全局的环境变量，可在 /etc/manpath.config 文件的 <em># set up PATH to MANPATH mapping.</em> 下添加:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MANPATH_MAP /usr/<span class="built_in">local</span>/texlive/2014/bin/x86_64-linux /usr/<span class="built_in">local</span>/texlive/2014/texmf-dist/doc/man</span><br></pre></td></tr></table></figure></p>
 <p>之后注销即可。</p>
 <blockquote>
 <p>注：如果环境变量配置出错导致无法登录，可以参见最下面的Linux配置环境变量后无法登录的解决方案</p>
 </blockquote>
-<h2 id="测试安装是否成功"><a href="#测试安装是否成功" class="headerlink" title="测试安装是否成功"></a>测试安装是否成功</h2><p>首先确认你可以执行 tex 程序:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tex --version</span><br><span class="line">    TeX <span class="number">3.14159265</span> (TeX Live ...)</span><br><span class="line">    Copyright ... D.E. Knuth.</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure></p>
-<p>如果你安装了 xetex 包,可以按如下步骤测试它能否访问系统字体（会生成文件，可在无用目录下执行）:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">xetex opentype-info.tex</span><br><span class="line">    This is XeTeX, Version <span class="number">3.14</span>...</span><br><span class="line">    ...</span><br><span class="line">    Output written on opentype-info.pdf (<span class="number">1</span> page).</span><br><span class="line">    Transcript written on opentype-info.log.</span><br></pre></td></tr></table></figure></p>
+<h2 id="测试安装是否成功"><a href="#测试安装是否成功" class="headerlink" title="测试安装是否成功"></a>测试安装是否成功</h2><p>首先确认你可以执行 tex 程序:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tex --version</span><br><span class="line">    TeX 3.14159265 (TeX Live ...)</span><br><span class="line">    Copyright ... D.E. Knuth.</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure></p>
+<p>如果你安装了 xetex 包,可以按如下步骤测试它能否访问系统字体（会生成文件，可在无用目录下执行）:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">xetex opentype-info.tex</span><br><span class="line">    This is XeTeX, Version 3.14...</span><br><span class="line">    ...</span><br><span class="line">    Output written on opentype-info.pdf (1 page).</span><br><span class="line">    Transcript written on opentype-info.log.</span><br></pre></td></tr></table></figure></p>
 <p>如果你收到 “Invalid fontname ‘Latin Modern Roman/ICU’…” 这样的错误信息,就说明需要配置系统才能找到 TEX Live 自带的字体。</p>
 <h3 id="XeTEX-和-LuaTEX-的系统字体配置"><a href="#XeTEX-和-LuaTEX-的系统字体配置" class="headerlink" title="XeTEX 和 LuaTEX 的系统字体配置"></a>XeTEX 和 LuaTEX 的系统字体配置</h3><p>XeTEX 和 LuaTEX 可以使用任何系统安装的字体,而不只是 TEX 目录树中的那些。它们使用类似但不完全一致的方式实现这一功能。</p>
 <p>在 Windows 下 TEX Live 提供的字体会自动为 XeTEX 所用。但如果你在 Unix 兼容的系统中安装了 xetex 软件包,则需要把系统配置一番 XeTEX 才能找到随 TEX Live 安装的那些字体。</p>
 <p>要在整个系统中使用 TEX Live 的字体 (假定你有足够的权限),请依照下面的步骤来做:</p>
 <ul>
 <li><p>将 texlive-fontconfig.conf 文件复制到 /etc/fonts/conf.d/09-texlive.conf。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo cp /usr/<span class="built_in">local</span>/texlive/<span class="number">2014</span>/texmf-var/fonts/conf/texlive-fontconfig.conf /etc/fonts/conf.d/<span class="number">09</span>-texlive.conf</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo cp /usr/<span class="built_in">local</span>/texlive/2014/texmf-var/fonts/conf/texlive-fontconfig.conf /etc/fonts/conf.d/09-texlive.conf</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>运行 fc-cache -fsv。<br>如果你没有足够的权限执行上述操作,或者只需要把 TEX Live 字体提供给你自己,可以这么做:</p>
 </li>
@@ -394,7 +387,7 @@
 <li>首先创建字体文件夹<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /usr/share/fonts/winfonts</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<p>然后把 Windows 下的六种中意字体复制到该文件夹，比如从Windows的C:/Windows/Fonts下拷贝最常使用的几种字体：<br>msyh.ttf（微软雅黑）  simfang.ttf（仿宋）  simhei.ttf（黑体）  simkai.ttf（楷体）  simsun.ttc（宋体）,并更改字体权限<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod <span class="number">644</span> /usr/share/fonts/winfonts/*</span><br></pre></td></tr></table></figure></p>
+<p>然后把 Windows 下的六种中意字体复制到该文件夹，比如从Windows的C:/Windows/Fonts下拷贝最常使用的几种字体：<br>msyh.ttf（微软雅黑）  simfang.ttf（仿宋）  simhei.ttf（黑体）  simkai.ttf（楷体）  simsun.ttc（宋体）,并更改字体权限<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod 644 /usr/share/fonts/winfonts/*</span><br></pre></td></tr></table></figure></p>
 <ul>
 <li>刷新字体库 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo mkfontscale</span><br><span class="line">$ sudo mkfontdir</span><br><span class="line">$ sudo <span class="built_in">fc</span>-cache -fsv</span><br></pre></td></tr></table></figure>
 </li>
@@ -420,7 +413,7 @@ SimSun,宋体:style=RegularUnibit:style=Regular
 <h2 id="无法登录的原因"><a href="#无法登录的原因" class="headerlink" title="无法登录的原因"></a>无法登录的原因</h2><p>由上可知，系统启动时会先读取 /etc/profile，然后读取 /etc/environment，最后才是 ～/.profile 文件，而在 /etc/environment 中也设置有环境变量 PATH，如果你在 ~/.profile 中也设置了环境变量 PATH，那么就会覆盖原来的 /etc/environment 中设置的环境变量 PATH。</p>
 <p>因此，～/.profile 文件中的环境变量设置一定不可大意，且在其设置的环境变量中要重新载入之前的环境变量，即添加 $PATH，且以冒号分割。</p>
 <p>比如以我安装的 TeXLive 为例，正确的环境变量设置应该为:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PATH=/usr/<span class="built_in">local</span>/texlive/<span class="number">2014</span>/bin/x86_64-linux:<span class="variable">$PATH</span>; <span class="built_in">export</span> PATH</span><br><span class="line">MANPATH=/usr/<span class="built_in">local</span>/texlive/<span class="number">2014</span>/texmf-dist/doc/man:<span class="variable">$MANPATH</span>; <span class="built_in">export</span> MANPATH</span><br><span class="line">INFOPATH=/usr/<span class="built_in">local</span>/texlive/<span class="number">2014</span>/texmf-dist/doc/info:<span class="variable">$INFOPATH</span>; <span class="built_in">export</span> INFOPATH</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PATH=/usr/<span class="built_in">local</span>/texlive/2014/bin/x86_64-linux:<span class="variable">$PATH</span>; <span class="built_in">export</span> PATH</span><br><span class="line">MANPATH=/usr/<span class="built_in">local</span>/texlive/2014/texmf-dist/doc/man:<span class="variable">$MANPATH</span>; <span class="built_in">export</span> MANPATH</span><br><span class="line">INFOPATH=/usr/<span class="built_in">local</span>/texlive/2014/texmf-dist/doc/info:<span class="variable">$INFOPATH</span>; <span class="built_in">export</span> INFOPATH</span><br></pre></td></tr></table></figure>
 <h2 id="解决方法一"><a href="#解决方法一" class="headerlink" title="解决方法一"></a>解决方法一</h2><p>在登录界面可以通过 <code>Ctrl + Alt + F1～F6&lt;</code> 的方式进入命令行，再通过<code>Ctrl + Alt + F7</code>的方式进入图形界面。</p>
 <p>因此我们可以进入图形界面登录 root 账户，将之前修改的环境变量删除或者更正即可。</p>
 <p>注意事项：我们在登录不同的账户时，～所对应的目录是不同的，例如 John 用户对应 /home/John/，而 root 用户对应 /root/，因此在以 root 用户登陆时，一定要注意环境变量文件的路径。</p>
@@ -433,9 +426,9 @@ SimSun,宋体:style=RegularUnibit:style=Regular
       
         <div class="post-tags">
           
-            <a href="/tags/学习/" rel="tag">#学习</a>
-          
             <a href="/tags/编程/" rel="tag">#编程</a>
+          
+            <a href="/tags/学习/" rel="tag">#学习</a>
           
         </div>
       
@@ -472,7 +465,7 @@ SimSun,宋体:style=RegularUnibit:style=Regular
         <div class="ds-share flat" data-thread-key="/blog/2015/03/install-texlive-in-ubuntu.html"
      data-title="在Ubuntu下安装和编译LaTex"
      data-content=""
-     data-url="http://www.ezlippi.com//blog/2015/03/install-texlive-in-ubuntu.html">
+     data-url="http://www.ezlippi.com/blog/2015/03/install-texlive-in-ubuntu.html">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -503,7 +496,7 @@ SimSun,宋体:style=RegularUnibit:style=Regular
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="/blog/2015/03/install-texlive-in-ubuntu.html"
-           data-title="在Ubuntu下安装和编译LaTex" data-url="http://www.ezlippi.com//blog/2015/03/install-texlive-in-ubuntu.html">
+           data-title="在Ubuntu下安装和编译LaTex" data-url="http://www.ezlippi.com/blog/2015/03/install-texlive-in-ubuntu.html">
       </div>
     
   </div>
@@ -573,13 +566,6 @@ SimSun,宋体:style=RegularUnibit:style=Regular
 
         </nav>
 
-        
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="fa fa-rss"></i>
-              RSS
-            </a>
-          </div>
         
 
         <div class="links-of-author motion-element">

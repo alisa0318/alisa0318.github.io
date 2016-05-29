@@ -41,13 +41,11 @@
 <link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="linux,shell," />
+  <meta name="keywords" content="shell,linux," />
 
 
 
 
-
-  <link rel="alternate" href="/atom.xml" title="Lippi-浮生志" type="application/atom+xml" />
 
 
 
@@ -71,6 +69,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="终端复用软件之tmux简介">
 <meta name="twitter:description" content="Tmux是一个优秀的终端复用软件，支持多标签，也支持窗口内部面板的分割，更重要的是，Tmux提供了窗体随时保存和恢复的功能。想象一下假如你在公司的服务器上开了许多窗口调试程序，回到家时通过SSH连接公司电脑又要打开一堆繁琐的窗口，而且还忘记了当时调试到哪一步了，那Tmux可以帮你解决这个难题，当SSH连接断开重新连接后能够恢复到原来的工作环境。">
+<meta name="twitter:image" content="http://www.ezlippi.com/images/images/tmux.jpg">
 
 
 
@@ -320,15 +319,10 @@
 
           
           
-	
-	<span id="busuanzi_container_page_pv" class="post-meta-item-text">
-		&nbsp; | &nbsp;  
-	    <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Hits
-	</span>
         </div>
       </header>
     
-	
+
 
 
     <div class="post-body" itemprop="articleBody">
@@ -350,13 +344,13 @@
 <p><img src="/images/images/tmux.jpg" alt=""></p>
 <p>图中左下角的3显示为当前会话，随后1 vim,2 bash,3 ssh 分别是3个窗口，蓝色bash表示当前窗口，图中用蓝色数字标记的1,2,3分别是bash窗口的三个面板。你还可以在tmux配置文件中给状态栏添加时间、天气等信息。</p>
 <h2 id="Tmux基本操作"><a href="#Tmux基本操作" class="headerlink" title="Tmux基本操作"></a>Tmux基本操作</h2><p>Tmux的所有操作必须使用一个前缀进入命令模式，默认前缀为Ctrl+b，很多人会改为Ctrl+a,你可以修改tmux.conf配置文件来修改默认前缀：</p>
-<figure class="highlight vim"><figcaption><span>Script </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 前缀设置为&lt;Ctrl-<span class="keyword">a</span>&gt;</span><br><span class="line"><span class="keyword">set</span> -<span class="keyword">g</span> prefix C-<span class="keyword">a</span></span><br><span class="line"># 解除&lt;Ctrl-<span class="keyword">b</span>&gt;</span><br><span class="line">ubind C-<span class="keyword">b</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight vim"><figcaption><span>Script </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 前缀设置为<span class="symbol">&lt;Ctrl-a&gt;</span></span><br><span class="line"><span class="keyword">set</span> -g prefix C-<span class="keyword">a</span></span><br><span class="line"># 解除<span class="symbol">&lt;Ctrl-b&gt;</span></span><br><span class="line">ubind C-<span class="keyword">b</span></span><br></pre></td></tr></table></figure>
 <p>修改之后重启Tmux生效，或者先按Ctrl+b，然后输入：，进入命令行模式， 在命令行模式下输入：</p>
 <figure class="highlight vim"><figcaption><span>Script </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">source</span>-<span class="keyword">file</span> ~/.tmux.<span class="keyword">conf</span></span><br></pre></td></tr></table></figure>
 <p>你也可以在配置文件中加入下面这句话，以后改了配置文件只需要按前缀+r了。</p>
-<figure class="highlight vim"><figcaption><span>Script </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 将<span class="keyword">r</span> 设置为加载配置文件，并显示<span class="string">"reloaded!"</span>信息</span><br><span class="line">bind <span class="keyword">r</span> <span class="keyword">source</span>-<span class="keyword">file</span> ~/.tmux.<span class="keyword">conf</span> \; <span class="keyword">display</span> <span class="string">"Reloaded!"</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight"><figcaption><span>Script </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 将r 设置为加载配置文件，并显示"reloaded!"信息</span><br><span class="line">bind r source-file ~/.tmux.conf \; display "Reloaded!"</span><br></pre></td></tr></table></figure>
 <p>加入如下几条语句， 现在切换面板就和vim一样了：</p>
-<figure class="highlight"><figcaption><span>Script </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># map Vi movement keys as pane movement keys</span><br><span class="line">bind h select-pane -L</span><br><span class="line">bind j select-pane -D</span><br><span class="line">bind k select-pane -U</span><br><span class="line">bind l select-pane -R</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">## 复制/粘贴</span><br><span class="line"></span><br><span class="line">1. 按前缀+[ 进入复制模式</span><br><span class="line">2. 按 space 开始复制，移动光标选择复制区域</span><br><span class="line">3. 按 Enter 复制并退出copy-mode。</span><br><span class="line">4. 将光标移动到指定位置，按前缀+ ] 粘贴</span><br><span class="line"></span><br><span class="line">如果把tmux比作vim的话，那么我们大部分时间都是处于编辑模式，只需要在配置文件(~/.tmux.conf)中加入如下行即可以像 vim一样使用hjkl移动:</span><br><span class="line"></span><br><span class="line">``` Vim Script </span><br><span class="line">#copy-mode 将快捷键设置为vi 模式</span><br><span class="line">setw -g mode-keys vi</span><br></pre></td></tr></table></figure>
+<figure class="highlight vim"><figcaption><span>Script </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># <span class="keyword">map</span> Vi movement <span class="built_in">keys</span> <span class="keyword">as</span> pane movement <span class="built_in">keys</span></span><br><span class="line">bind h select-pane -L</span><br><span class="line">bind <span class="keyword">j</span> select-pane -D</span><br><span class="line">bind <span class="keyword">k</span> select-pane -U</span><br><span class="line">bind <span class="keyword">l</span> select-pane -R</span><br><span class="line">``` </span><br><span class="line"></span><br><span class="line">## 复制/粘贴</span><br><span class="line"></span><br><span class="line"><span class="number">1</span>. 按前缀+[ 进入复制模式</span><br><span class="line"><span class="number">2</span>. 按 space 开始复制，移动光标选择复制区域</span><br><span class="line"><span class="number">3</span>. 按 Enter 复制并退出<span class="keyword">copy</span>-<span class="keyword">mode</span>。</span><br><span class="line"><span class="number">4</span>. 将光标移动到指定位置，按前缀+ ] 粘贴</span><br><span class="line"></span><br><span class="line">如果把tmux比作<span class="keyword">vim</span>的话，那么我们大部分时间都是处于编辑模式，只需要在配置文件(~/.tmux.<span class="keyword">conf</span>)中加入如下行即可以像 <span class="keyword">vim</span>一样使用hjkl移动:</span><br><span class="line"></span><br><span class="line">``` Vim Script </span><br><span class="line">#copy-<span class="keyword">mode</span> 将快捷键设置为<span class="keyword">vi</span> 模式</span><br><span class="line">setw -g <span class="keyword">mode</span>-<span class="built_in">keys</span> <span class="keyword">vi</span></span><br></pre></td></tr></table></figure>
 <h2 id="会话的创建和保存"><a href="#会话的创建和保存" class="headerlink" title="会话的创建和保存"></a>会话的创建和保存</h2><ul>
 <li>终端运行tmux + 会话名，创建或打开会话</li>
 <li>前缀 + d 退出并保存会话</li>
@@ -370,7 +364,7 @@
 <li>前缀 + l 切换到上一个窗口</li>
 </ul>
 <h2 id="面板操作"><a href="#面板操作" class="headerlink" title="面板操作"></a>面板操作</h2><p>在配置文件中添加下面两行就可以使用<code>前缀+ |-</code>来水平和垂直分割窗口：</p>
-<figure class="highlight vim"><figcaption><span>Script </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># use PREFIX | <span class="keyword">to</span> <span class="built_in">split</span> window horizontally <span class="built_in">and</span> PREFIX - <span class="keyword">to</span> <span class="built_in">split</span> vertically</span><br><span class="line">bind | <span class="built_in">split</span>-window -<span class="keyword">h</span></span><br><span class="line">bind - <span class="built_in">split</span>-window -<span class="keyword">v</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight vim"><figcaption><span>Script </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># use PREFIX | <span class="keyword">to</span> <span class="keyword">split</span> window horizontally <span class="built_in">and</span> PREFIX - <span class="keyword">to</span> <span class="keyword">split</span> vertically</span><br><span class="line">bind | <span class="keyword">split</span>-window -h</span><br><span class="line">bind - <span class="keyword">split</span>-window -v</span><br></pre></td></tr></table></figure>
 <p>添加如下命令到配置文件后后可以使用HJKL来调整窗口大小:</p>
 <figure class="highlight vim"><figcaption><span>Script </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># <span class="keyword">resize</span> panes using PREFIX H, J, K, L</span><br><span class="line">bind H <span class="keyword">resize</span>-pane -L <span class="number">5</span></span><br><span class="line">bind J <span class="keyword">resize</span>-pane -D <span class="number">5</span></span><br><span class="line">bind K <span class="keyword">resize</span>-pane -U <span class="number">5</span></span><br><span class="line">bind L <span class="keyword">resize</span>-pane -R <span class="number">5</span></span><br></pre></td></tr></table></figure>
 <p>其他操作：</p>
@@ -392,9 +386,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/linux/" rel="tag">#linux</a>
-          
             <a href="/tags/shell/" rel="tag">#shell</a>
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
           
         </div>
       
@@ -431,7 +425,7 @@
         <div class="ds-share flat" data-thread-key="/blog/2016/01/tmux-guide.html"
      data-title="终端复用软件之tmux简介"
      data-content=""
-     data-url="http://www.ezlippi.com//blog/2016/01/tmux-guide.html">
+     data-url="http://www.ezlippi.com/blog/2016/01/tmux-guide.html">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -462,7 +456,7 @@
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="/blog/2016/01/tmux-guide.html"
-           data-title="终端复用软件之tmux简介" data-url="http://www.ezlippi.com//blog/2016/01/tmux-guide.html">
+           data-title="终端复用软件之tmux简介" data-url="http://www.ezlippi.com/blog/2016/01/tmux-guide.html">
       </div>
     
   </div>
@@ -532,13 +526,6 @@
 
         </nav>
 
-        
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="fa fa-rss"></i>
-              RSS
-            </a>
-          </div>
         
 
         <div class="links-of-author motion-element">

@@ -47,8 +47,6 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Lippi-浮生志" type="application/atom+xml" />
-
 
 
 
@@ -74,6 +72,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Gradle系列教程之任务管理">
 <meta name="twitter:description" content="Gradle有两个最基本的概念：project和task,Gradle里面的所有东西都基于这两个概念。project通常指一个项目，而task指构建过程中的任务。一次构建可以有1到n个project，每个project有1到n个task，这篇文章主要介绍Gradle任务的创建和管理。">
+<meta name="twitter:image" content="http://www.ezlippi.com/images/dag26.png">
 
 
 
@@ -323,15 +322,10 @@
 
           
           
-	
-	<span id="busuanzi_container_page_pv" class="post-meta-item-text">
-		&nbsp; | &nbsp;  
-	    <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Hits
-	</span>
         </div>
       </header>
     
-	
+
 
 
     <div class="post-body" itemprop="articleBody">
@@ -388,7 +382,7 @@ third
 first
 second
 </code></pre><h3 id="添加随意的代码"><a href="#添加随意的代码" class="headerlink" title="添加随意的代码"></a>添加随意的代码</h3><p>接下来我们来学习怎么在build脚本中定义一些随机的代码，在实际情况下，如果你熟悉Groovy的语法你可以编写一些类或者方法，接下来你将会创建一个表示版本的类，在Java中一个class遵循bean的约定（POJO），就是添加setter和getter方法来访问类的域，到后面发现手工写这些方法很烦人，Groovy有个对应的概念叫POGO(plain-old Groovy object),他们的setter和getter方法在生成字节码的时候自动添加，因此运行的时候可以直接访问，看下面这个例子：</p>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">version = <span class="keyword">new</span> ProjectVersion(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProjectVersion</span> &#123;</span></span><br><span class="line">	Integer major</span><br><span class="line">	Integer minor</span><br><span class="line">	Boolean release</span><br><span class="line"></span><br><span class="line">	ProjectVersion(Integer major, Integer minor) &#123;</span><br><span class="line">		<span class="keyword">this</span>.major = major</span><br><span class="line">		<span class="keyword">this</span>.minor = minor</span><br><span class="line">		<span class="keyword">this</span>.release = Boolean.FALSE</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	ProjectVersion(Integer major, Integer minor, 	Boolean release) &#123;</span><br><span class="line">		<span class="keyword">this</span>(major, minor)</span><br><span class="line">		<span class="keyword">this</span>.release = release</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="annotation">@Override</span></span><br><span class="line">	String toString() &#123;</span><br><span class="line">		<span class="comment">//只有release为false的时候才添加后缀SNAPSHOT</span></span><br><span class="line">		<span class="string">"$major.$minor$&#123;release ? '' : '-SNAPSHOT'&#125;"</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">version = <span class="keyword">new</span> ProjectVersion(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProjectVersion</span> &#123;</span></span><br><span class="line">	Integer major</span><br><span class="line">	Integer minor</span><br><span class="line">	Boolean release</span><br><span class="line"></span><br><span class="line">	ProjectVersion(Integer major, Integer minor) &#123;</span><br><span class="line">		<span class="keyword">this</span>.major = major</span><br><span class="line">		<span class="keyword">this</span>.minor = minor</span><br><span class="line">		<span class="keyword">this</span>.release = Boolean.FALSE</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	ProjectVersion(Integer major, Integer minor, 	Boolean release) &#123;</span><br><span class="line">		<span class="keyword">this</span>(major, minor)</span><br><span class="line">		<span class="keyword">this</span>.release = release</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	String toString() &#123;</span><br><span class="line">		<span class="comment">//只有release为false的时候才添加后缀SNAPSHOT</span></span><br><span class="line">		<span class="string">"$major.$minor$&#123;release ? '' : '-SNAPSHOT'&#125;"</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>当运行这个修改的脚本之后，你可以看到printVersion的输出和之前一样，但是你还是得手工修改build脚本来更改版本号，接下来你将学习如何把版本号存储在一个文件里然后配置你的脚本去读取这个配置。</p>
 <h3 id="任务的配置"><a href="#任务的配置" class="headerlink" title="任务的配置"></a>任务的配置</h3><p>在你写代码之前，你要新建一个属性文件version.properties,内容如下：</p>
 <pre><code>major = 0
@@ -575,7 +569,7 @@ Releasing the project...
         <div class="ds-share flat" data-thread-key="/blog/2015/04/gradle-task-management.html"
      data-title="Gradle系列教程之任务管理"
      data-content=""
-     data-url="http://www.ezlippi.com//blog/2015/04/gradle-task-management.html">
+     data-url="http://www.ezlippi.com/blog/2015/04/gradle-task-management.html">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -606,7 +600,7 @@ Releasing the project...
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="/blog/2015/04/gradle-task-management.html"
-           data-title="Gradle系列教程之任务管理" data-url="http://www.ezlippi.com//blog/2015/04/gradle-task-management.html">
+           data-title="Gradle系列教程之任务管理" data-url="http://www.ezlippi.com/blog/2015/04/gradle-task-management.html">
       </div>
     
   </div>
@@ -676,13 +670,6 @@ Releasing the project...
 
         </nav>
 
-        
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="fa fa-rss"></i>
-              RSS
-            </a>
-          </div>
         
 
         <div class="links-of-author motion-element">

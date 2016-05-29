@@ -47,8 +47,6 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Lippi-浮生志" type="application/atom+xml" />
-
 
 
 
@@ -75,6 +73,7 @@
 <meta name="twitter:title" content="java中NIO与传统IO">
 <meta name="twitter:description" content="感性认识：
 传统的socket IO中，需要为每个连接创建一个线程，当并发的连接数量非常巨大时，线程所占用的栈内存和CPU线程切换的开销将非常巨大。使用NIO，不再需要为每个线程创建单独的线程，可以用一个含有限数量线程的线程池，甚至一个线程来为任意数量的连接服务。由于线程数量小于连接数量，所以每个线程进行IO操作时就不能阻塞，如果阻塞的话，有些连接就得不到处理，NIO提供了这种非阻塞的能力。">
+<meta name="twitter:image" content="http://www.ezlippi.com/images/images/java/1.jpeg">
 
 
 
@@ -324,15 +323,10 @@
 
           
           
-	
-	<span id="busuanzi_container_page_pv" class="post-meta-item-text">
-		&nbsp; | &nbsp;  
-	    <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Hits
-	</span>
         </div>
       </header>
     
-	
+
 
 
     <div class="post-body" itemprop="articleBody">
@@ -605,11 +599,11 @@ client.listen();
       
         <div class="post-tags">
           
-            <a href="/tags/IO/" rel="tag">#IO</a>
+            <a href="/tags/java/" rel="tag">#java</a>
           
             <a href="/tags/NIO/" rel="tag">#NIO</a>
           
-            <a href="/tags/java/" rel="tag">#java</a>
+            <a href="/tags/IO/" rel="tag">#IO</a>
           
             <a href="/tags/阻塞/" rel="tag">#阻塞</a>
           
@@ -620,16 +614,16 @@ client.listen();
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2014/10/androidDP-project.html" rel="next" title="Androidpn 消息推送总结">
-                <i class="fa fa-chevron-left"></i> Androidpn 消息推送总结
+              <a href="/blog/2014/10/xmpp-analise.html" rel="next" title="XMPP协议分析-具体分析">
+                <i class="fa fa-chevron-left"></i> XMPP协议分析-具体分析
               </a>
             
           </div>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blog/2014/11/android-push.html" rel="prev" title="Android消息推送方式">
-                Android消息推送方式 <i class="fa fa-chevron-right"></i>
+              <a href="/blog/2014/11/how-to-evaluate-the-hackers-and-painters.html" rel="prev" title="如何评价『黑客与画家』">
+                如何评价『黑客与画家』 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -648,7 +642,7 @@ client.listen();
         <div class="ds-share flat" data-thread-key="/blog/2014/11/java-nio.html"
      data-title="java中NIO与传统IO"
      data-content=""
-     data-url="http://www.ezlippi.com//blog/2014/11/java-nio.html">
+     data-url="http://www.ezlippi.com/blog/2014/11/java-nio.html">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -679,7 +673,7 @@ client.listen();
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="/blog/2014/11/java-nio.html"
-           data-title="java中NIO与传统IO" data-url="http://www.ezlippi.com//blog/2014/11/java-nio.html">
+           data-title="java中NIO与传统IO" data-url="http://www.ezlippi.com/blog/2014/11/java-nio.html">
       </div>
     
   </div>
@@ -749,13 +743,6 @@ client.listen();
 
         </nav>
 
-        
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="fa fa-rss"></i>
-              RSS
-            </a>
-          </div>
         
 
         <div class="links-of-author motion-element">

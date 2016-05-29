@@ -47,8 +47,6 @@
 
 
 
-  <link rel="alternate" href="/atom.xml" title="Lippi-浮生志" type="application/atom+xml" />
-
 
 
 
@@ -79,6 +77,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="利用github-pages建立个人博客">
 <meta name="twitter:description" content="Github很好的将代码和社区联系在了一起，于是发生了很多有趣的事情，世界也因为他美好了一点点。Github作为现在最流行的代码仓库，已经得到很多大公司和项目的青睐，比如jQuery、Twitter等。为使项目更方便的被人理解，介绍页面少不了，甚至会需要完整的文档站，Github替你想到了这一点，他提供了Github Pages的服务，不仅可以方便的为项目建立介绍站点，也可以用来建立个人博客。">
+<meta name="twitter:image" content="http://www.ezlippi.com/images/images/githubpages/bootcamp_1_ssh.jpg">
 
 
 
@@ -340,15 +339,10 @@
 
           
           
-	
-	<span id="busuanzi_container_page_pv" class="post-meta-item-text">
-		&nbsp; | &nbsp;  
-	    <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Hits
-	</span>
         </div>
       </header>
     
-	
+
 
 
     <div class="post-body" itemprop="articleBody">
@@ -620,9 +614,9 @@ layout: default
 layout: default
 title: my first post
 ---
-&lt;h1&gt;&lt;/h1&gt;
+&lt;h1&gt;{{ page.title }}&lt;/h1&gt;
 &lt;p&gt;This is my first post.Click the link below to go back to index:&lt;/p&gt;
-&lt;a href=&quot;/index.html&quot;&gt;Go back&lt;/a&gt;
+&lt;a href=&quot;{{ site.baseurl }}/index.html&quot;&gt;Go back&lt;/a&gt;
 </code></pre><p>修改index.html</p>
 <pre><code>---
 layout: default
@@ -660,7 +654,10 @@ tags: [github-page, jekyll, liquid]
 <pre><code>&lt;div id=&quot;categories-3&quot; class=&quot;left&quot;&gt;
      &lt;h3&gt;Categories&lt;/h3&gt;
      &lt;ul&gt;
-         
+         {% for cat in site.categories %}
+             <li class="cat-item cat-item-6">
+             	<a href="{{ site.baseurl }}/categories/{{ cat[0] }}.html">{{ cat[0] }}</a></li>
+             {% endfor %}
      &lt;/ul&gt;
  &lt;/div&gt;
 </code></pre><p>注意到分类的url链接，这里的categories目录以及其中的html不会自动生成，需要手动添加的，也就是说每增加一个分类，都需要在categories下添加一个该分类的html。当然你可以选择其他目录，甚至考虑其他解决方案，不过我还没想到更简单的方法。Tag的处理方式类似，这里就省略了。</p>
@@ -821,7 +818,7 @@ git push -u origin master
         <div class="ds-share flat" data-thread-key="/blog/2015/03/github-pages-blog.html"
      data-title="利用github-pages建立个人博客"
      data-content=""
-     data-url="http://www.ezlippi.com//blog/2015/03/github-pages-blog.html">
+     data-url="http://www.ezlippi.com/blog/2015/03/github-pages-blog.html">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -852,7 +849,7 @@ git push -u origin master
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="/blog/2015/03/github-pages-blog.html"
-           data-title="利用github-pages建立个人博客" data-url="http://www.ezlippi.com//blog/2015/03/github-pages-blog.html">
+           data-title="利用github-pages建立个人博客" data-url="http://www.ezlippi.com/blog/2015/03/github-pages-blog.html">
       </div>
     
   </div>
@@ -922,13 +919,6 @@ git push -u origin master
 
         </nav>
 
-        
-          <div class="feed-link motion-element">
-            <a href="/atom.xml" rel="alternate">
-              <i class="fa fa-rss"></i>
-              RSS
-            </a>
-          </div>
         
 
         <div class="links-of-author motion-element">
