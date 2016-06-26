@@ -271,6 +271,119 @@
             
               
                 
+                <a class="post-title-link" href="/blog/2014/12/c-code-opt.html" itemprop="url">
+                  C代码优化小贴士
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-12-27T00:00:00+08:00" content="2014-12-27">
+              2014-12-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/c/" itemprop="url" rel="index">
+                    <span itemprop="name">c</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/2014/12/c-code-opt.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2014/12/c-code-opt.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          虽然对于优化C代码有很多有效的指导方针，但是对于彻底地了解编译器和你工作的机器依然无法取代，通常，加快程序的速度也会加大代码量。这些增加的代码也会影响一个程序的复杂度和可读性，这是不可接受的，比如你在一些小型的设备上编程，例如：移动设备、PDA……，这些有着严格的内存限制，于是，在优化的座右铭是:写代码在内存和速度都应该优化。
+          <div class="post-more-link text-center">
+            <a class="btn" href="/blog/2014/12/c-code-opt.html">
+              阅读全文 &raquo;
+            </a>
+          </div>
+        
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/blog/2014/12/skip-list.html" itemprop="url">
                   skip list跳跃表实现
                 </a>
@@ -1272,119 +1385,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/blog/2014/11/android-push.html" itemprop="url">
-                  Android消息推送方式
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2014-11-01T00:00:00+08:00" content="2014-11-01">
-              2014-11-01
-            </time>
-          </span>
-
-          
-            <span class="post-category" >
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/web/" itemprop="url" rel="index">
-                    <span itemprop="name">web</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/blog/2014/11/android-push.html#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2014/11/android-push.html" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-        </div>
-      </header>
-    
-
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>当我们开发需要和服务器交互的应用程序时，基本上都需要获取服务器端的数据，比如《地震及时通》就需要及时获取服务器上最新的地震信息。要获取服务器上不定时更新的信息一般来说有两种方法，第一种是客户端使用<strong>Pull（拉）</strong>的方式，隔一段时间就去服务器上获取信息，看是否有更新的信息出现。第二种就是服务器使用<strong>Push（推送）</strong>的方式，当服务器端有新信息了，则把最新的信息Push到客户端上。<br>虽然Pull和Push两种方式都能实现获取服务器端更新信息的功能，但是明显来说<strong>Push is better than pull</strong>。<br><strong>因为Pull方式更费客户端的网络流量，更主要的是费电量。</strong><br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/blog/2014/11/android-push.html#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
 
   </section>
 
@@ -1431,7 +1431,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">64</span>
+              <span class="site-state-item-count">65</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -1448,7 +1448,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">70</span>
+                <span class="site-state-item-count">72</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -1496,7 +1496,7 @@
             <p class="site-author-name">友情链接</p>
             
               <span class="links-of-author-item">
-                <a href="http://www.woaitqs.cc/android/2016/05/23/android-binder" target="_blank">Qisen Tang</a>
+                <a href="http://www.woaitqs.cc/" target="_blank">Qisen Tang</a>
               </span>
             
               <span class="links-of-author-item">
