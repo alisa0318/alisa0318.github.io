@@ -61,19 +61,19 @@
 传统的socket IO中，需要为每个连接创建一个线程，当并发的连接数量非常巨大时，线程所占用的栈内存和CPU线程切换的开销将非常巨大。使用NIO，不再需要为每个线程创建单独的线程，可以用一个含有限数量线程的线程池，甚至一个线程来为任意数量的连接服务。由于线程数量小于连接数量，所以每个线程进行IO操作时就不能阻塞，如果阻塞的话，有些连接就得不到处理，NIO提供了这种非阻塞的能力。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="java中NIO与传统IO">
-<meta property="og:url" content="http://www.ezlippi.com/blog/2014/11/java-nio.html">
-<meta property="og:site_name" content="EZLippi-浮生志">
+<meta property="og:url" content="http://www.Marktoy.com/blog/2014/11/java-nio.html">
+<meta property="og:site_name" content="Marktoy-水墨汐涵">
 <meta property="og:description" content="感性认识：
 传统的socket IO中，需要为每个连接创建一个线程，当并发的连接数量非常巨大时，线程所占用的栈内存和CPU线程切换的开销将非常巨大。使用NIO，不再需要为每个线程创建单独的线程，可以用一个含有限数量线程的线程池，甚至一个线程来为任意数量的连接服务。由于线程数量小于连接数量，所以每个线程进行IO操作时就不能阻塞，如果阻塞的话，有些连接就得不到处理，NIO提供了这种非阻塞的能力。">
-<meta property="og:image" content="http://www.ezlippi.com/images/images/java/1.jpeg">
-<meta property="og:image" content="http://www.ezlippi.com/images/images/java/2.jpeg">
-<meta property="og:image" content="http://www.ezlippi.com/images/images/java/3.jpeg">
+<meta property="og:image" content="http://www.Marktoy.com/images/images/java/1.jpeg">
+<meta property="og:image" content="http://www.Marktoy.com/images/images/java/2.jpeg">
+<meta property="og:image" content="http://www.Marktoy.com/images/images/java/3.jpeg">
 <meta property="og:updated_time" content="2016-03-01T05:17:06.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="java中NIO与传统IO">
 <meta name="twitter:description" content="感性认识：
 传统的socket IO中，需要为每个连接创建一个线程，当并发的连接数量非常巨大时，线程所占用的栈内存和CPU线程切换的开销将非常巨大。使用NIO，不再需要为每个线程创建单独的线程，可以用一个含有限数量线程的线程池，甚至一个线程来为任意数量的连接服务。由于线程数量小于连接数量，所以每个线程进行IO操作时就不能阻塞，如果阻塞的话，有些连接就得不到处理，NIO提供了这种非阻塞的能力。">
-<meta name="twitter:image" content="http://www.ezlippi.com/images/images/java/1.jpeg">
+<meta name="twitter:image" content="http://www.Marktoy.com/images/images/java/1.jpeg">
 
 
 
@@ -91,7 +91,7 @@
   };
 </script>
 
-  <title> java中NIO与传统IO | EZLippi-浮生志 </title>
+  <title> java中NIO与传统IO | Marktoy-水墨汐涵 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -140,7 +140,7 @@
   <div class="custom-logo-site-title">
     <a href="/"  class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <span class="site-title">EZLippi-浮生志</span>
+      <span class="site-title">Marktoy-水墨汐涵</span>
       <span class="logo-line-after"><i></i></span>
     </a>
   </div>
@@ -642,7 +642,7 @@ client.listen();
         <div class="ds-share flat" data-thread-key="/blog/2014/11/java-nio.html"
      data-title="java中NIO与传统IO"
      data-content=""
-     data-url="http://www.ezlippi.com/blog/2014/11/java-nio.html">
+     data-url="http://www.Marktoy.com/blog/2014/11/java-nio.html">
   <div class="ds-share-inline">
     <ul  class="ds-share-icons-16">
 
@@ -673,7 +673,7 @@ client.listen();
   <div class="comments" id="comments">
     
       <div class="ds-thread" data-thread-key="/blog/2014/11/java-nio.html"
-           data-title="java中NIO与传统IO" data-url="http://www.ezlippi.com/blog/2014/11/java-nio.html">
+           data-title="java中NIO与传统IO" data-url="http://www.Marktoy.com/blog/2014/11/java-nio.html">
       </div>
     
   </div>
@@ -711,8 +711,8 @@ client.listen();
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.jpg"
-               alt="EZLippi" />
-          <p class="site-author-name" itemprop="name">EZLippi</p>
+               alt="Marktoy" />
+          <p class="site-author-name" itemprop="name">Marktoy</p>
           <p class="site-description motion-element" itemprop="description">Easy Lippi</p>
         </div>
         <nav class="site-state motion-element">
@@ -749,7 +749,7 @@ client.listen();
           
             
               <span class="links-of-author-item">
-                <a href="https://github.com/EZLippi" target="_blank">
+                <a href="https://github.com/Marktoy" target="_blank">
                   
                     <i class="fa fa-github"></i> GitHub
                   
@@ -757,7 +757,7 @@ client.listen();
               </span>
             
               <span class="links-of-author-item">
-                <a href="http://weibo.com/ouyanglip" target="_blank">
+                <a href="http://weibo.com/Marktoy" target="_blank">
                   
                     <i class="fa fa-weibo"></i> weibo
                   
@@ -839,7 +839,7 @@ client.listen();
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">EZLippi</span>
+  <span class="author" itemprop="copyrightHolder">Marktoy</span>
 </div>
 
 <div class="powered-by">
@@ -848,7 +848,7 @@ client.listen();
 
 <div class="theme-info">
    托管在 -
-  <a class="theme-link" href="https://github.com/EZLippi/EZLippi.github.io">
+  <a class="theme-link" href="https://github.com/Marktoy/Marktoy.github.io">
     Github
   </a>
 
@@ -1078,7 +1078,7 @@ client.listen();
   
 
   <script type="text/javascript">
-    var duoshuoQuery = {short_name:"ezlippi"};
+    var duoshuoQuery = {short_name:"Marktoy"};
     (function() {
       var ds = document.createElement('script');
       ds.type = 'text/javascript';ds.async = true;
