@@ -4,12 +4,4 @@ Disallow:
 
 User-agent: *
 Disallow: 
-<<<<<<< HEAD
-<<<<<<< HEAD
-Sitemap: http://alisa0318.github.io/sitemap.xml
-=======
 Sitemap: http://www.ezlippi.com/sitemap.xml
->>>>>>> parent of 4e979cb... PUBLISH
-=======
-Sitemap: http://www.Marktoy.com/sitemap.xml
->>>>>>> parent of c3f3e04... publish
