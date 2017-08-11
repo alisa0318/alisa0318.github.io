@@ -3,7 +3,7 @@
 
 ####博客地址
 
-http://www.ezlippi.com
+http://www.marktoy.top
 
 ####使用本项目作为博客模板，仅需如下几步：
 
@@ -15,7 +15,7 @@ http://www.ezlippi.com
 
 ####联系方式
 
-联系方式：Email(ouyanglip@gmail.com) 
+联系方式：Email(marktoy_ybb@hotmail.com) 
 
 
 ####使用本项目作模板的博客链接
