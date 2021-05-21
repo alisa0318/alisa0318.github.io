@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Marktoy-水墨汐涵</title>
+  
+  
+  <link href="http://example.com/atom.xml" rel="self"/>
+  
+  <link href="http://example.com/"/>
+  <updated>2021-05-21T03:25:19.944Z</updated>
+  <id>http://example.com/</id>
+  
+  <author>
+    <name>Alex Marktoy</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>英语学习</title>
+    <link href="http://example.com/2021/05/21/test/"/>
+    <id>http://example.com/2021/05/21/test/</id>
+    <published>2021-05-21T03:25:19.944Z</published>
+    <updated>2021-05-21T03:25:19.944Z</updated>
+    
+    
+    <summary type="html">园子里时不时就吹起一阵学英语的浪潮，不少同鞋表示一直想学，或者一直在学，就是效果不明显（你躺枪了么？）相信自己或者身边的人都或多或少吃了英语弱的当（你懂的，我们重点在说薪水的问题:)。而各种英语成功学，方法论，版本是一个接一个层出不穷。今天我们不说为什么要学好英语，好处太多而且已经广为流传了，我们主要结合目标管理来讨论一下如何坚定不移的，快速的学好英语。以我自己的亲身经历作样板，以下情况全部属实，绝无虚构。</summary>
+    
+    
+    
+    <category term="生活" scheme="http://example.com/categories/%E7%94%9F%E6%B4%BB/"/>
+    
+    
+    <category term="技术" scheme="http://example.com/tags/%E6%8A%80%E6%9C%AF/"/>
+    
+    <category term="Node" scheme="http://example.com/tags/Node/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://example.com/2021/05/21/%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/"/>
+    <id>http://example.com/2021/05/21/%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92/</id>
+    <published>2021-05-21T02:28:16.398Z</published>
+    <updated>2021-05-21T02:28:16.398Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;a name=&quot;GyT3e&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;学习重点&quot;&gt;&lt;a href=&quot;#学习重点&quot; class=&quot;headerlink&quot; title=&quot;学习重点&quot;&gt;&lt;/a&gt;学习重点&lt;/h3&gt;&lt;p&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="生活" scheme="http://example.com/categories/%E7%94%9F%E6%B4%BB/"/>
+    
+    
+    <category term="技术" scheme="http://example.com/tags/%E6%8A%80%E6%9C%AF/"/>
+    
+    <category term="Node" scheme="http://example.com/tags/Node/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>photo</title>
+    <link href="http://example.com/2021/05/19/photo/"/>
+    <id>http://example.com/2021/05/19/photo/</id>
+    <published>2021-05-19T14:00:28.000Z</published>
+    <updated>2021-05-21T02:28:16.360Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;&lt;img data-src=&quot;/2021/05/19/photo/head.jpg&quot; alt=&quot;这是代替图片的文字，随便写&quot;&gt;&lt;br&gt;&lt;img data-src=&quot;/2021/05/19/photo/head.jpg&quot;</summary>
+        
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Hello World</title>
+    <link href="http://example.com/2021/05/19/hello-world/"/>
+    <id>http://example.com/2021/05/19/hello-world/</id>
+    <published>2021-05-19T08:13:24.383Z</published>
+    <updated>2021-05-19T08:13:24.383Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for more info. If you get any problems when using Hexo, you can find the answer in &lt;a href=&quot;https://hexo.io/docs/troubleshooting.html&quot;&gt;troubleshooting&lt;/a&gt; or you can ask me on &lt;a href=&quot;https://github.com/hexojs/hexo/issues&quot;&gt;GitHub&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id=&quot;Quick-Start&quot;&gt;&lt;a href=&quot;#Quick-Start&quot; class=&quot;headerlink&quot; title=&quot;Quick Start&quot;&gt;&lt;/a&gt;Quick Start&lt;/h2&gt;&lt;h3 id=&quot;Create-a-new-post&quot;&gt;&lt;a href=&quot;#Create-a-new-post&quot; class=&quot;headerlink&quot; title=&quot;Create a new post&quot;&gt;&lt;/a&gt;Create a new post&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ hexo new &lt;span class=&quot;string&quot;&gt;&amp;quot;My New Post&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;More info: &lt;a href=&quot;https://hexo.io/docs/writing.html&quot;&gt;Writing&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;Run-server&quot;&gt;&lt;a href=&quot;#Run-server&quot; class=&quot;headerlink&quot; title=&quot;Run server&quot;&gt;&lt;/a&gt;Run server&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ hexo server&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;More info: &lt;a href=&quot;https://hexo.io/docs/server.html&quot;&gt;Server&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;Generate-static-files&quot;&gt;&lt;a href=&quot;#Generate-static-files&quot; class=&quot;headerlink&quot; title=&quot;Generate static files&quot;&gt;&lt;/a&gt;Generate static files&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ hexo generate&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;More info: &lt;a href=&quot;https://hexo.io/docs/generating.html&quot;&gt;Generating&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;Deploy-to-remote-sites&quot;&gt;&lt;a href=&quot;#Deploy-to-remote-sites&quot; class=&quot;headerlink&quot; title=&quot;Deploy to remote sites&quot;&gt;&lt;/a&gt;Deploy to remote sites&lt;/h3&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ hexo deploy&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;More info: &lt;a href=&quot;https://hexo.io/docs/one-command-deployment.html&quot;&gt;Deployment&lt;/a&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="后端 - C#" scheme="http://example.com/categories/%E5%90%8E%E7%AB%AF-C/"/>
+    
+    
+    <category term="技术" scheme="http://example.com/tags/%E6%8A%80%E6%9C%AF/"/>
+    
+    <category term="Node" scheme="http://example.com/tags/Node/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>2021,你好</title>
+    <link href="http://example.com/2021/05/19/2021,%E4%BD%A0%E5%A5%BD/"/>
+    <id>http://example.com/2021/05/19/2021,%E4%BD%A0%E5%A5%BD/</id>
+    <published>2021-05-19T08:13:24.382Z</published>
+    <updated>2021-05-19T08:13:24.382Z</updated>
+    
+    
+    <summary type="html">文章描述</summary>
+    
+    
+    
+    <category term="生活" scheme="http://example.com/categories/%E7%94%9F%E6%B4%BB/"/>
+    
+    
+    <category term="技术" scheme="http://example.com/tags/%E6%8A%80%E6%9C%AF/"/>
+    
+    <category term="Node" scheme="http://example.com/tags/Node/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>今天很高兴</title>
+    <link href="http://example.com/2021/05/14/%E4%BB%8A%E5%A4%A9%E5%BE%88%E9%AB%98%E5%85%B4/"/>
+    <id>http://example.com/2021/05/14/%E4%BB%8A%E5%A4%A9%E5%BE%88%E9%AB%98%E5%85%B4/</id>
+    <published>2021-05-14T14:23:10.000Z</published>
+    <updated>2021-05-19T08:13:24.383Z</updated>
+    
+    
+    
+    
+    
+  </entry>
+  
+</feed>
